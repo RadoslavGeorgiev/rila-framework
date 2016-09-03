@@ -1,0 +1,29 @@
+{
+	"name": "rila/rila",
+	"type": "wordpress-plugin",
+	"description": "An extensible object-oriented theme framework for WordPress.",
+	"keywords": ["wordpress", "plugin", "rila", "twig", "blade"],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Radoslav Georgiev",
+			"email": "rageorgiev@gmail.com",
+			"homepage": "http://rageorgiev.com/"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/RadoslavGeorgiev/rila/issues",
+		"wiki": "https://github.com/RadoslavGeorgiev/rila/wiki",
+		"source": "https://github.com/RadoslavGeorgiev/rila"
+	},
+    "require": {
+    	"php": ">=5.3.0",
+        "twig/twig": "1.*",
+        "philo/laravel-blade": "3.*"
+    },
+	"autoload": {
+		"files": [
+			"rila-framework.php"
+		]
+	}
+}
