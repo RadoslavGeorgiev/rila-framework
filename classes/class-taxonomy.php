@@ -4,6 +4,7 @@ namespace Rila;
 use Rila\Item;
 use Rila\Query;
 use Rila\Collection\Terms;
+use Rila\Missing_Object_Exception;
 
 /**
  * Encapsulates the WP_Term class in order to provide
@@ -38,8 +39,12 @@ class Taxonomy extends Item {
 			return $term;
 		}
 
+		if( ( is_int( $term ) || is_string( $term ) ) && $id = intval( $term ) ) {
+			$term = get_term( $id );
+		}
+
 		if( ! is_a( $term, 'WP_Term' ) ) {
-			throw new \Exception( 'Taxonomy factory needs a term.' );
+			throw new Missing_Object_Exception( 'Taxonomy could not find a term.' );
 		}
 
 		$taxonomy = str_replace( 'dw-', '', $term->taxonomy );
@@ -73,6 +78,8 @@ class Taxonomy extends Item {
 	 * @since 0.1
 	 */
 	protected function initialize() {
+		parent::initialize();
+		
 		$this->translate(array(
 			'id'    => 'term_id',
 			'title' => 'name'
@@ -236,9 +243,9 @@ class Taxonomy extends Item {
 
 	/**
 	 * Returns all terms from the taxonomy.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @return Taxonomy[]
 	 */
 	public static function all() {

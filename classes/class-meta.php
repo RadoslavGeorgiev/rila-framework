@@ -122,9 +122,9 @@ class Meta implements \Iterator {
 
     /**
      * Returns all availble shortcuts
-     * 
+     *
      * @since 0.1
-     * 
+     *
      * @return string[]
      */
     protected static function shortcuts() {
@@ -137,6 +137,7 @@ class Meta implements \Iterator {
 		$shortcuts = array(
 			'date'     => 'Rila\\Date::factory',
 			'post'     => 'Rila\\Post_Type::factory',
+			'term'     => 'Rila\\Taxonomy::factory',
 			'file'     => 'Rila\\File::factory',
 			'image'    => 'Rila\\Image::factory',
 			'user'     => 'Rila\\User::factory',
@@ -154,9 +155,9 @@ class Meta implements \Iterator {
 
 		/**
 		 * Allows additional shortcuts to be added to the mapping.
-		 * 
+		 *
 		 * @since 0.1
-		 * 
+		 *
 		 * @param string[] $shortcuts The already available shortcuts
 		 * @return string[]
 		 */
@@ -189,56 +190,60 @@ class Meta implements \Iterator {
 				$map_to = $shortcuts[ $map_to ];
 			}
 
-			# Try a simple class name
-			if( class_exists( $map_to ) ) {
-				if( $is_array ) {
-					$all = array();
-
-					foreach( $value as $item ) {
-						$all[] = new $map_to( $item );
-					}
-
-					$value = $all;
-					continue;
-				} else {
-					$value = new $map_to( $value );
-					continue;
-				}
-			}
-
-			# Try class methods
-			if( preg_match( '~^(.+)::(.+)$~', $map_to, $matches ) ) {
-				$cn = $matches[ 1 ];
-				$mn = $matches[ 2 ];
-
-				if( class_exists( $cn ) && method_exists( $cn, $mn ) ) {
+			try {
+				# Try a simple class name
+				if( class_exists( $map_to ) ) {
 					if( $is_array ) {
-						$value = array_map( array( $cn, $mn ), $value );
+						$all = array();
+
+						foreach( $value as $item ) {
+							$all[] = new $map_to( $item );
+						}
+
+						$value = $all;
 						continue;
 					} else {
-						$value = call_user_func( array( $cn, $mn ), $value );
+						$value = new $map_to( $value );
 						continue;
 					}
 				}
-			}
 
-			# Try filters
-			if( 0 === strpos( $map_to, 'filter:' ) ) {
-				$filter_name = str_replace( 'filter:', '', $map_to );
+				# Try class methods
+				if( preg_match( '~^(.+)::(.+)$~', $map_to, $matches ) ) {
+					$cn = $matches[ 1 ];
+					$mn = $matches[ 2 ];
 
-				$value = apply_filters( $filter_name, $value );
-				continue;
-			}
+					if( class_exists( $cn ) && method_exists( $cn, $mn ) ) {
+						if( $is_array ) {
+							$value = array_map( array( $cn, $mn ), $value );
+							continue;
+						} else {
+							$value = call_user_func( array( $cn, $mn ), $value );
+							continue;
+						}
+					}
+				}
 
-			# Try normal functions
-			if( function_exists( $map_to ) ) {
-				if( $is_array ) {
-					$value = array_map( $map_to, $value );
-					continue;
-				} else {
-					$value = call_user_func( $map_to, $value );
+				# Try filters
+				if( 0 === strpos( $map_to, 'filter:' ) ) {
+					$filter_name = str_replace( 'filter:', '', $map_to );
+
+					$value = apply_filters( $filter_name, $value );
 					continue;
 				}
+
+				# Try normal functions
+				if( function_exists( $map_to ) ) {
+					if( $is_array ) {
+						$value = array_map( $map_to, $value );
+						continue;
+					} else {
+						$value = call_user_func( $map_to, $value );
+						continue;
+					}
+				}
+			} catch( Missing_Object_Exception $e ) {
+				return false;
 			}
 		}
 

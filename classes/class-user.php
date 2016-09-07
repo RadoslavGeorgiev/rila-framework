@@ -3,6 +3,7 @@ namespace Rila;
 
 use Rila\Item;
 use Rila\Query;
+use Rila\Missing_Object_Exception;
 
 /**
  * Encapsulates the WP_User class in order to provide
@@ -57,14 +58,14 @@ class User extends Item {
 		}
 
 		if( ! is_a( $user, 'WP_User' ) ) {
-			throw new \Exception( 'User factory needs a user.' );
+			throw new Missing_Object_Exception( 'User factory could not find a user.' );
 		}
 
 		/**
 		 * Allows the class that is used for users to be overridden.
-		 * 
+		 *
 		 * @since 0.1
-		 * 
+		 *
 		 * @param string $class_name The default class name that will be used.
 		 * @return string
 		 */
@@ -79,6 +80,8 @@ class User extends Item {
 	 * @since 0.1
 	 */
 	protected function initialize() {
+		parent::initialize();
+		
 		$this->translate(array(
 			'id'    => 'ID',
 			'name'  => 'display_name',
@@ -147,9 +150,9 @@ class User extends Item {
 
 	/**
 	 * Proxies the "can" method of the WP_User object.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @param string $capability The capability yo check for.
 	 * @return bool
 	 */

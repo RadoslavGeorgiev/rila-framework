@@ -3,6 +3,7 @@ namespace Rila;
 
 use Rila\Item;
 use Rila\Collection\Comments;
+use Rila\Missing_Object_Exception;
 
 /**
  * Encapsulates the WP_Post class in order to provide
@@ -53,7 +54,7 @@ class Post_Type extends Item {
 		}
 
 		if( ! is_a( $post, 'WP_Post' ) ) {
-			throw new \Exception( 'Post type factory needs a post.' );
+			throw new Missing_Object_Exception( 'Post type factory could not find a post.' );
 		}
 
 		if( 'attachment' == $post->post_type ) {
@@ -95,6 +96,8 @@ class Post_Type extends Item {
 	 * @since 0.1
 	 */
 	protected function initialize() {
+		parent::initialize();
+
 		$this->initialize_taxonomies();
 
 		$this->translate(array(
@@ -277,9 +280,9 @@ class Post_Type extends Item {
 
 	/**
 	 * Handles the comments form.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @param mixed[] $args Arguments for the comment form.
 	 * @return string An empty string.
 	 */
@@ -397,5 +400,16 @@ class Post_Type extends Item {
 		$location->add_rule( 'post_type', $slug );
 
 		return self::_add_fields( $id, $title, $location, $fields );
+	}
+
+	/**
+	 * Returns an array of simple properties for var_dump() or print_r().
+	 *
+	 * @since 0.1
+	 *
+	 * @return mixed[]
+	 */
+	public function __debugInfo() {
+		return (array) $this->item;
 	}
 }

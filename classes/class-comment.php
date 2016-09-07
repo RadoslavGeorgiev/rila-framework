@@ -3,6 +3,7 @@ namespace Rila;
 
 use Rila\Item;
 use Rila\Collection\Comments;
+use Rila\Missing_Object_Exception;
 
 /**
  * Encapsulates the WP_Comment class in order to provide
@@ -42,14 +43,14 @@ class Comment extends Item {
 		}
 
 		if( ! is_a( $comment, 'WP_Comment' ) ) {
-			throw new \Exception( 'Comment factory needs a comment.' );
+			throw new Missing_Object_Exception( 'Comment factory could not retrieve a comment.' );
 		}
 
 		/**
 		 * Allows the class that is used for comments to be overridden.
-		 * 
+		 *
 		 * @since 0.1
-		 * 
+		 *
 		 * @param string $class_name The default class name that will be used.
 		 * @return string
 		 */
@@ -64,7 +65,8 @@ class Comment extends Item {
 	 * @since 0.1
 	 */
 	protected function initialize() {
-		// print_r( $this->item ); exit;
+		parent::initialize();
+
 		$this->translate(array(
 			'id'       => 'comment_ID',
 			'ID'       => 'comment_ID',
@@ -98,11 +100,11 @@ class Comment extends Item {
 
 	/**
 	 * Handles the children of the comment.
-	 * 
+	 *
 	 * @since 0.1
 	 * @ToDo: Verify is this is the best method for retrieving comments
 	 * without generating one additional query per comment.
-	 * 
+	 *
 	 * @return Rila\Collection\Comments
 	 */
 	public function children() {
@@ -113,9 +115,9 @@ class Comment extends Item {
 
 	/**
 	 * Returns a human_time_diff string for when the comment was created.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @return string
 	 */
 	public function ago() {
@@ -124,9 +126,9 @@ class Comment extends Item {
 
 	/**
 	 * Returns the reply link.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @param mixed[] $args Arguments for the link.
 	 * @return string
 	 */

@@ -30,9 +30,9 @@ class Site extends Item {
 
 		/**
 		 * Allows the class that handles the site to be modified.
-		 * 
+		 *
 		 * @since 0.1
-		 * 
+		 *
 		 * @param string $class_name The class name that will handle the site.
 		 * @return string Either the original or new class name.
 		 */
@@ -45,6 +45,8 @@ class Site extends Item {
 	 * Initializes the needed values.
 	 */
 	protected function __construct() {
+		parent::initialize();
+		
 		$this->item = new \stdClass();
 
 		# Allow the ACF or other extensions to load meta.
@@ -154,9 +156,9 @@ class Site extends Item {
 
 	/**
 	 * Handles the language attributes.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @return string
 	 */
 	public function language_attributes() {
@@ -167,9 +169,9 @@ class Site extends Item {
 
 	/**
 	 * Calls the wp_head function.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @return string
 	 */
 	public function head() {
@@ -180,9 +182,9 @@ class Site extends Item {
 
 	/**
 	 * Calls the wp_footer function.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @return string
 	 */
 	public function footer() {
@@ -193,9 +195,9 @@ class Site extends Item {
 
 	/**
 	 * Checks if the current page is something.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @param string $page_type The page type.
 	 * @return bool
 	 */
