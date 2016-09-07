@@ -74,9 +74,43 @@ abstract class Item {
 	protected static $registered_groups = array();
 
 	/**
+	 * Holds external methods that provide methods and/or properties.
+	 *
+	 * @since 0.1
+	 * @var callable[]
+	 */
+	protected $external = array();
+
+	/**
 	* Initializes the item.
 	*/
-	protected function initialize() {}
+	protected function initialize() {
+		/**
+		 * Allows external methods to be added to the object.
+		 *
+		 * @since 0.1
+		 *
+		 * @param Item $item The item that can be modified.
+		 */
+		do_action( 'rila.item.extend', $this );
+	}
+
+	/**
+	 * Allows external callbacks to be added.
+	 *
+	 * If the third parameter, $args, is set to 0 meaning that the method does
+	 * not require any parameters, the method will be accessible as a property too.
+	 *
+	 * @since 1.0
+	 *
+	 * @param string   $name The name of the property/method the callback works with.
+	 * @param callable $func The function that will handle the property.
+	 * @param int      $args The amount of required arguments.
+	 * @return Item
+	 */
+	public function add_external_method( $name, $callable, $args = 0 ) {
+		$this->external[ $name ] = array( $callable, $args );
+	}
 
 	/**
 	* The isset call confirms if a property exists.
@@ -103,6 +137,15 @@ abstract class Item {
 		# Check cache first
 		if( isset( $this->cache[ $property ] ) ) {
 			return $this->cache[ $property ];
+		}
+
+		# Priority 0: External methods
+		if( isset( $this->external[ $property ] ) ) {
+			$callback = $this->external[ $property ];
+
+			if( 0 === $callback[ 1 ] ) {
+				return call_user_func( $callback[ 0 ], $this );
+			}
 		}
 
 		# Priority 1: Custom methods
@@ -382,5 +425,28 @@ abstract class Item {
 		foreach( self::$registered_groups as $group ) {
 			$group->register();
 		}
+	}
+
+	/**
+	 * Attempt calling a custom method.
+	 *
+	 * @since 0.1
+	 *
+	 * @param string $method The name of the method.
+	 * @param mixed[] $args The arguments for the method.
+	 * @return mixed
+	 */
+	public function __call( $method, $args ) {
+		if( isset( $this->external[ $method ] ) ) {
+			$callback = $this->external[ $method ];
+
+			if( count( $args ) >= $callback[ 1 ] ) {
+				array_unshift( $args, $this );
+
+				return call_user_func_array( $callback[ 0 ], $args );
+			}
+		}
+
+		trigger_error( 'Call to undefined method ' . __CLASS__ . '::' . $method . '()', E_USER_ERROR );
 	}
 }
