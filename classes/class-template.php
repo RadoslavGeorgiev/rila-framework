@@ -179,7 +179,7 @@ class Template {
 	 * Renders the template and eventually echoes it.
 	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @param bool $echo A flag that indicates if the output should be echoed.
 	 * @return string
 	 */
@@ -303,6 +303,10 @@ class Template {
 			'theme'   => Theme::instance(),
 			'now'     => new Date
 		);
+
+		if( is_tax() ) {
+			$defaults[ 'term' ] = Taxonomy::factory( get_queried_object() );
+		}
 
 		/**
 		 * Allows the global Twig context to be modified.

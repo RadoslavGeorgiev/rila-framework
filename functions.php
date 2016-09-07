@@ -67,9 +67,7 @@ function rila_site() {
  * @return Template A template that can be manipulated or rendered.
  */
 function rila_view( $name, $context = array() ) {
-	$view = new Rila\Template( $name, $context );
-	
-	return $view;
+	return new Rila\Template( $name, $context );
 }
 
 /**
