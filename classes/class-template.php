@@ -306,6 +306,29 @@ class Template {
 
 		if( is_tax() ) {
 			$defaults[ 'term' ] = Taxonomy::factory( get_queried_object() );
+
+		# Locate post types
+		foreach( get_post_types() as $post_type ) {
+			$plural = preg_match( '~y$~i', $post_type )
+				? preg_replace( '~y$~i', 'ies', $post_type )
+				: $post_type . 's';
+
+			$plural = strtolower( str_replace( '-', '_', $plural ) );
+
+			$collection = new Collection\Posts();
+			$defaults[ $plural ] = $collection->type( $post_type );
+		}
+
+		# Locate taxonomies
+		foreach( get_taxonomies() as $taxonomy ) {
+			$plural = preg_match( '~y$~i', $taxonomy )
+				? preg_replace( '~y$~i', 'ies', $taxonomy )
+				: $taxonomy . 's';
+
+			$plural = strtolower( str_replace( '-', '_', $plural ) );
+
+			$collection = new Collection\Terms();
+			$defaults[ $plural ] = $collection->where( 'taxonomy', $taxonomy );
 		}
 
 		/**
