@@ -306,6 +306,7 @@ class Template {
 
 		if( is_tax() ) {
 			$defaults[ 'term' ] = Taxonomy::factory( get_queried_object() );
+		}
 
 		# Locate post types
 		foreach( get_post_types() as $post_type ) {
