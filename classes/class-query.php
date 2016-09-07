@@ -5,14 +5,7 @@ namespace Rila;
  * Handles WP query in the nice way.
  */
 class Query implements \Iterator, \Countable {
-	/**
-	 * Holds the normal arguments for the query.
-	 *
-	 * @var mixed[]
-	 */
-	protected $args = array(
-		'paged' => 1
-	);
+	use Query_Args;
 
 	/**
 	 * Holds the query for the posts.
@@ -88,7 +81,11 @@ class Query implements \Iterator, \Countable {
 				));
 			}
 
-			$this->args = array_merge( $this->args, $args );
+			if( ! isset( $args[ 'paged' ] ) ) {
+				$args[ 'paged' ] = 1;
+			}
+
+			$this->args = $args;
 		}
 	}
 
@@ -99,11 +96,13 @@ class Query implements \Iterator, \Countable {
 	 */
 	protected function query() {
 		if( is_null( $this->query ) ) {
-			$this->query = new \WP_Query( $this->args );
+			$args = $this->args;
+
+			$this->query = new \WP_Query( $args );
 
 			# Check the next page
-			if( isset( $this->args[ 'posts_per_page' ] ) && -1 != $this->args[ 'posts_per_page' ] ) {
-				if( $this->query->max_num_pages > $this->args[ 'paged' ] ) {
+			if( isset( $args[ 'posts_per_page' ] ) && -1 != $args[ 'posts_per_page' ] ) {
+				if( $this->query->max_num_pages > $args[ 'paged' ] ) {
 					$this->next = 1 + $this->args[ 'paged' ];
 				}
 			}
@@ -198,62 +197,6 @@ class Query implements \Iterator, \Countable {
     	return isset( $this->query->posts[ $this->query->current_post ] );
     }
 
-    /**
-     * Sets an argument to the query.
-     *
-     * @param string $key   The key for the argument.
-     * @param mixed  $value The new value.
-     * @param bool   $merge Wether to merge arrays.
-     * @return Query The query.
-     */
-    public function set( $key, $value, $merge = false ) {
-    	if( $merge && is_array( $value ) ) {
-    		$current = isset( $this->args[ $key ] ) ? $this->args[ $key ] : array();
-    		$current = array_merge( $current, $value );
-    		$this->args[ $key ] = $current;
-    	} else {
-	    	$this->args[ $key ] = $value;
-    	}
-
-    	return $this;
-    }
-
-    /**
-     * Sets the order to alphabetical.
-     *
-     * @return Query The query.
-     */
-    public function alphabetical() {
-		$this->args[ 'order' ]   = 'ASC';
-		$this->args[ 'orderby' ] = 'post_title';
-
-		return $this;
-    }
-
-    /**
-     * Sets the order newest first.
-     *
-     * @return Query The query.
-     */
-    public function newest() {
-		$this->args[ 'order' ]   = 'DESC';
-		$this->args[ 'orderby' ] = 'post_date';
-
-		return $this;
-    }
-
-    /**
-     * Sets the order to oldest first
-     *
-     * @return Query The query.
-     */
-    public function oldest() {
-		$this->args[ 'order' ]   = 'ASC';
-		$this->args[ 'orderby' ] = 'post_date';
-
-		return $this;
-    }
-
 	/**
 	 * Display pagination.
 	 */
@@ -285,17 +228,6 @@ class Query implements \Iterator, \Countable {
     	return $this;
     }
 
-    /**
-     * Changes the post type parameter.
-     *
-     * @param mixed[] $post_types The post types to accept.
-     * @return Query
-     */
-    public function post_type( $post_types ) {
-        $this->args[ 'post_type' ] = (array) $post_types;
-        return $this;
-    }
-
 	/**
 	 * Returns the amount of posts in the query.
 	 *
@@ -305,7 +237,21 @@ class Query implements \Iterator, \Countable {
 	 */
 	public function count() {
 		$this->query();
-		
+
 		return count( $this->query->posts );
+	}
+
+	/**
+	 * Returns an array of simple properties for var_dump()
+	 *
+	 * @since 0.1
+	 *
+	 * @return mixed[]
+	 */
+	public function __debugInfo() {
+		return array(
+			'args'  => $this->args,
+			'query' => $this->query
+		);
 	}
 }

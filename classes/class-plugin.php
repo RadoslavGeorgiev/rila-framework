@@ -96,6 +96,7 @@ class Plugin {
 
 		$files = array(
 			'class-' . $clean . '.php',
+			'trait-' . $clean . '.php',
 			'abstract-class-' . $clean . '.php'
 		);
 

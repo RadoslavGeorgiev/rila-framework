@@ -2,6 +2,7 @@
 namespace Rila\Collection;
 
 use Rila\Collection;
+use Rila\Query_Args;
 
 /**
  * Handles collections of posts.
@@ -9,6 +10,8 @@ use Rila\Collection;
  * @since 0.1
  */
 class Posts extends Collection {
+	use Query_args;
+
 	/**
 	 * Holds the type of supported items.
 	 *
@@ -18,12 +21,32 @@ class Posts extends Collection {
 	protected $item_type = 'Rila\\Post_Type';
 
 	/**
-	 * Holds additional values for a meta query.
+	 * Ensures that the internal arguments are saved.
 	 *
-	 * @since 0.1
-	 * @var mixed[]
+	 * @since 1.0
 	 */
-	protected $meta_query = array();
+	protected function initialize() {
+		$args = array(
+			'posts_per_page' => -1,
+			'paged'          => 1
+		);
+
+		if( ! is_null( $this->ids ) ) {
+			$id_args = array(
+				'post_type'      => 'any',
+				'post__in'       => $this->ids,
+				'posts_per_page' => -1,
+				'order'          => 'ASC',
+				'orderby'        => 'post__in'
+			);
+
+			$args = array_merge( $args, $id_args );
+		} elseif( ! is_null( $this->args ) ) {
+			$args = array_merge( $args, $this->args );
+		}
+
+		$this->args = $args;
+	}
 
 	/**
 	 * Loads data from the database.
@@ -31,27 +54,7 @@ class Posts extends Collection {
 	 * @since 0.1
 	 */
 	protected function load() {
-		$args = array();
-
-		if( ! is_null( $this->ids ) ) {
-			$args = array(
-				'post_type'      => 'any',
-				'post__in'       => $this->ids,
-				'posts_per_page' => -1,
-				'order'          => 'ASC',
-				'orderby'        => 'post__in'
-			);
-		} elseif( ! is_null( $this->args ) ) {
-			$args = $this->args;
-		}
-
-		if( isset( $args[ 'meta_query' ] ) ) {
-			$args[ 'meta_query' ] = array_merge( $args[ 'meta_query' ], $this->meta_query );
-		} else {
-			$args[ 'meta_query' ] = $this->meta_query;
-		}
-
-		$this->items = array_map( 'rila_post', get_posts( $args ) );
+		$this->items = array_map( 'rila_post', get_posts( $this->args ) );
 		$this->initialized = true;
 	}
 
@@ -65,26 +68,5 @@ class Posts extends Collection {
 		return new Posts(array(
 			'posts_per_page' => -1
 		));
-	}
-
-	/**
-	 * Adds a value to the arguments.
-	 *
-	 * @since 0.1
-	 * @param string $key   The key for the argument.
-	 * @param mixed  $value The value of the argument.
-	 */
-	protected function set( $key, $value ) {
-		static $dummy;
-
-		if( is_null( $dummy ) ) {
-			$dummy = new \WP_Post( new \stdClass() );
-		}
-
-		if( property_exists( $dummy, $key ) ) {
-			$this->args[ $key ] = $value;
-		} else {
-			$this->meta_query[] = compact( 'key', 'value' );
-		}
 	}
 }
