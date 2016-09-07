@@ -138,7 +138,7 @@ function rila_date( $date ) {
  * @param mixed $request WP_Query arguments. Can also be an array of IDs for specific posts.
  * @return Query
  */
-function rila_query( $request ) {
+function rila_query( $request = array() ) {
 	return new Rila\Query( $request );
 }
 

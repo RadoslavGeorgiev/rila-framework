@@ -27,7 +27,7 @@ class Collection implements \Iterator, \Countable  {
 	 * @since 0.1
 	 * @var mixed[]
 	 */
-	protected $args;
+	public $args;
 
 	/**
 	 * Sometimes instead of full arguments, only IDs could be passed. Check this one first.
@@ -61,6 +61,11 @@ class Collection implements \Iterator, \Countable  {
 	 */
 	public function __construct( $request = null ) {
 		if( is_null( $request ) ) {
+			# Allow simple initialization of child classes
+			if( method_exists( $this, 'initialize' ) ) {
+				$this->initialize();
+			}
+
 			return;
 		}
 
@@ -97,6 +102,11 @@ class Collection implements \Iterator, \Countable  {
 			}
 		} else {
 			$this->args = wp_parse_args( $request );
+		}
+
+		# Allow simple initialization of child classes
+		if( method_exists( $this, 'initialize' ) ) {
+			$this->initialize();
 		}
 	}
 

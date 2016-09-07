@@ -78,7 +78,7 @@ abstract class Custom_Widget extends \WP_Widget {
 		);
 
 		# Add fields
-		if( ! empty( $this->fields ) && class_exists( 'ACF_Group' ) ) {
+		if( ! empty( $this->fields ) && class_exists( 'ACF_Group' ) && function_exists( 'acf_add_local_field_group' ) ) {
 			\ACF_Group::create( $this->id, $this->title )
 				->add_location_rule( 'widget', $this->id )
 				->add_fields( $this->fields )
