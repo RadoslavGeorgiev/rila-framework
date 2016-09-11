@@ -104,7 +104,7 @@ trait Query_Args {
 	 * is the slug of a taxonomy and instead of using ->set() directly, it will
 	 * setup the corresponding tax_query parameter.
 	 *
-	 * @since 1.0
+	 * @since 0.1
 	 *
 	 * @param string  $method The name of the called method.
 	 * @param mixed[] $args The arguments for the function.
@@ -136,7 +136,7 @@ trait Query_Args {
 			/**
 			 * Allows the parameter shortcuts to be modified.
 			 *
-			 * @since 1.0
+			 * @since 0.1
 			 *
 			 * @param string[] $shortcuts Property shortcuts for the query.
 			 * @return string[]
@@ -241,7 +241,7 @@ trait Query_Args {
 	/**
 	 * Handles meta queries.
 	 *
-	 * @since 1.0
+	 * @since 0.1
 	 *
 	 * @param string $key The key for the meta query.
 	 * @param mixed  $value The value for the meta query.

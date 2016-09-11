@@ -101,7 +101,7 @@ abstract class Item {
 	 * If the third parameter, $args, is set to 0 meaning that the method does
 	 * not require any parameters, the method will be accessible as a property too.
 	 *
-	 * @since 1.0
+	 * @since 0.1
 	 *
 	 * @param string   $name The name of the property/method the callback works with.
 	 * @param callable $func The function that will handle the property.

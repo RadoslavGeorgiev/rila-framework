@@ -23,7 +23,7 @@ class Posts extends Collection {
 	/**
 	 * Ensures that the internal arguments are saved.
 	 *
-	 * @since 1.0
+	 * @since 0.1
 	 */
 	protected function initialize() {
 		$args = array(
