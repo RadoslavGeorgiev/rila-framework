@@ -247,7 +247,11 @@ class Post_Type extends Item {
 	 * @return string
 	 */
 	public function __toString() {
-		return apply_filters( 'the_title', $this->item->post_title );
+		return sprintf(
+			'<a href="%s">%s</a>',
+			$this->url,
+			$this->title
+		);
 	}
 
 	/**

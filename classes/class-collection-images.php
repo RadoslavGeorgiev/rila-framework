@@ -3,7 +3,7 @@ namespace Rila\Collection;
 
 /**
  * Handles collections of images.
- * 
+ *
  * @since 0.1
  */
 class Images extends Files {
@@ -33,12 +33,6 @@ class Images extends Files {
 			);
 		} elseif( ! is_null( $this->args ) ) {
 			$args = $this->args;
-		}
-
-		if( isset( $args[ 'meta_query' ] ) ) {
-			$args[ 'meta_query' ] = array_merge( $args[ 'meta_query' ], $this->meta_query );
-		} else {
-			$args[ 'meta_query' ] = $this->meta_query;
 		}
 
 		$args[ 'post_type' ]      = 'attachment';

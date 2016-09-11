@@ -81,7 +81,7 @@ class User extends Item {
 	 */
 	protected function initialize() {
 		parent::initialize();
-		
+
 		$this->translate(array(
 			'id'    => 'ID',
 			'name'  => 'display_name',
@@ -126,14 +126,18 @@ class User extends Item {
 	}
 
 	/**
-	 * Converts the post type to a string.
+	 * Converts the user to a string.
 	 *
 	 * @since 0.1
 	 *
 	 * @return string
 	 */
 	public function __toString() {
-		return apply_filters( 'the_title', $this->name );
+		return sprintf(
+			'<a href="%s">%s</a>',
+			$this->url,
+			$this->title
+		);
 	}
 
 	/**
