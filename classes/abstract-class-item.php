@@ -176,45 +176,43 @@ abstract class Item {
 			$returnable = $this->item->$property;
 		}
 
-		# Check if there is something to return, map and cache
-		if( isset( $returnable ) ) {
-			/**
-			 * Allows the returnable value of an item to be modified.
-			 *
-			 * @since 0.1
-			 *
-			 * @param mixed  $value    The value before being mapped to anything.
-			 * @param string $property The name of the property.
-			 * @param Item   $item     The item whose property is being modified.
-			 * @return mixed
-			 */
-			$returnable = apply_filters( 'rila.property.raw', $returnable, $property, $this );
-
-			# Maybe map
-			if( $returnable ) {
-				$returnable = $this->map_value( $returnable, $property );
-			}
-
-			/**
-			 * Allows the already mapped/processed value of an item to be modified.
-			 *
-			 * @since 0.1
-			 *
-			 * @param mixed  $value    The value before being mapped to anything.
-			 * @param string $property The name of the property.
-			 * @param Item   $item     The item whose property is being modified.
-			 * @return mixed
-			 */
-			$returnable = apply_filters( 'rila.property.mapped', $returnable, $property, $this );
-
-			$this->cache[ $original ] = $returnable;
-
-			return $returnable;
-		}
-
+		# If there is no value, just return false
 		if( ! isset( $returnable ) ) {
-			throw new Undefined_Property_Exception( "Undefined property $property" );
+			return false;
 		}
+
+		/**
+		 * Allows the returnable value of an item to be modified.
+		 *
+		 * @since 0.1
+		 *
+		 * @param mixed  $value    The value before being mapped to anything.
+		 * @param string $property The name of the property.
+		 * @param Item   $item     The item whose property is being modified.
+		 * @return mixed
+		 */
+		$returnable = apply_filters( 'rila.property.raw', $returnable, $property, $this );
+
+		# Maybe map
+		if( $returnable ) {
+			$returnable = $this->map_value( $returnable, $property );
+		}
+
+		/**
+		 * Allows the already mapped/processed value of an item to be modified.
+		 *
+		 * @since 0.1
+		 *
+		 * @param mixed  $value    The value before being mapped to anything.
+		 * @param string $property The name of the property.
+		 * @param Item   $item     The item whose property is being modified.
+		 * @return mixed
+		 */
+		$returnable = apply_filters( 'rila.property.mapped', $returnable, $property, $this );
+
+		$this->cache[ $original ] = $returnable;
+
+		return $returnable;
 	}
 
 	 /**
