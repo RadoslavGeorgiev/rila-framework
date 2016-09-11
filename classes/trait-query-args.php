@@ -16,6 +16,19 @@ trait Query_Args {
 	public $args = array();
 
 	/**
+	 * Indicates if arguments can be augumented at the current moment.
+	 * This method would throw an exception in collections and queries if data has
+	 * already been retrieved.
+	 *
+	 * @since 0.1
+	 *
+	 * @return bool
+	 */
+	protected function allow_augumentation() {
+		return true;
+	}
+
+	/**
      * Sets an argument to the query.
      *
      * @param string $key   The key for the argument.
@@ -24,6 +37,10 @@ trait Query_Args {
      * @return Query The query.
      */
     public function set( $key, $value, $merge = false ) {
+		if( ! $this->allow_augumentation() ) {
+			return false;
+		}
+
 		# Some properties expect arrays. Make sure to format values
 		if( in_array( $key, array( 'post__in', 'post__not_in', 'author__in' ) ) ) {
 			$value = (array) $value;
@@ -46,8 +63,8 @@ trait Query_Args {
      * @return Query The query.
      */
     public function alphabetical() {
-		$this->args[ 'order' ]   = 'ASC';
-		$this->args[ 'orderby' ] = 'post_title';
+		$this->set( 'order', 'ASC' );
+		$this->set( 'orderby', 'post_title' );
 
 		return $this;
     }
@@ -58,8 +75,8 @@ trait Query_Args {
      * @return Query The query.
      */
     public function newest() {
-		$this->args[ 'order' ]   = 'DESC';
-		$this->args[ 'orderby' ] = 'post_date';
+		$this->set( 'order', 'DESC' );
+		$this->set( 'orderby', 'post_date' );
 
 		return $this;
     }
@@ -70,8 +87,8 @@ trait Query_Args {
      * @return Query The query.
      */
     public function oldest() {
-		$this->args[ 'order' ]   = 'ASC';
-		$this->args[ 'orderby' ] = 'post_date';
+		$this->set( 'order', 'ASC' );
+		$this->set( 'orderby', 'post_date' );
 
 		return $this;
     }
@@ -124,7 +141,7 @@ trait Query_Args {
 			 * @param string[] $shortcuts Property shortcuts for the query.
 			 * @return string[]
 			 */
-			$shortcuts = apply_filters( 'rila.query.shortcuts', $shortcuts );
+			$shortcuts = apply_filters( 'rila.query_args.shortcuts', $shortcuts );
 		}
 
 		# Use shortcuts if needed
@@ -163,7 +180,7 @@ trait Query_Args {
 				$this->args[ 'tax_query' ] = array();
 			}
 
-			$this->args[ 'tax_query' ][] = $row;
+			$this->set( 'tax_query', array( $row ), true );
 
 			return $this;
 		}
@@ -185,11 +202,17 @@ trait Query_Args {
 			}
 
 			$value = count( $args ) > 1 ? $args : $args[ 0 ];
-			$this->args[ 'date_query' ][ 0 ][ $prop ] = $value;
+			$date_query = isset( $this->args[ 'date_query' ] )
+				? $this->args[ 'date_query' ]
+				: array( array() );
 
+
+			$date_query[ 0 ][ $prop ] = $value;
 			if( ! is_null( $inclusive ) ) {
-				$this->args[ 'date_query' ][ 0 ][ 'inclusive' ] = $inclusive;
+				$date_query[ 0 ][ 'inclusive' ] = $inclusive;
 			}
+
+			$this->set( 'date_query', $date_query );
 
 			return $this;
 		}
@@ -214,17 +237,6 @@ trait Query_Args {
 
 		return $this;
 	}
-
-    /**
-     * Changes the post type parameter.
-     *
-     * @param mixed[] $post_types The post types to accept.
-     * @return Query
-     */
-    public function type( $post_types ) {
-        $this->args[ 'post_type' ] = (array) $post_types;
-        return $this;
-    }
 
 	/**
 	 * Handles meta queries.
@@ -256,11 +268,8 @@ trait Query_Args {
 			}
 		}
 
-		if( ! isset( $this->args[ 'meta_query' ] ) ) {
-			$this->args[ 'meta_query' ] = array();
-		}
-
-		$this->args[ 'meta_query' ][] = $row;
+		# Save the query
+		$this->set( 'meta_query', array( $row ), true );
 
 		return $this;
 	}
@@ -287,7 +296,7 @@ trait Query_Args {
 		}
 
 		if( $parent && is_int( $parent ) ) {
-			$this->args[ 'post_parent' ] = $parent;
+			$this->set( 'post_parent', $parent );
 		}
 
 		return $this;

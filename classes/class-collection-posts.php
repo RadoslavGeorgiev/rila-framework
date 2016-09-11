@@ -69,4 +69,20 @@ class Posts extends Collection {
 			'posts_per_page' => -1
 		));
 	}
+
+	/**
+	 * Ensures that arguments for get_posts() cannot be changed once posts are retrieved.
+	 *
+	 * @since 0.1
+	 *
+	 * @return bool
+	 */
+	protected function allow_augumentation() {
+		if( $this->initialized ) {
+			throw new \Exception( "Once a collection is initialized with data, it cannot be filtered from the database. Use ->filter() instead!" );
+			return false;
+		}
+
+		return true;
+	}
 }
