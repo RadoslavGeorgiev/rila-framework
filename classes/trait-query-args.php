@@ -8,14 +8,6 @@ namespace Rila;
  */
 trait Query_Args {
 	/**
-	 * Holds the actual, prepared arguments for WP_Query/get_posts.
-	 *
-	 * @since 0.1
-	 * @var mixed[]
-	 */
-	public $args = array();
-
-	/**
 	 * Indicates if arguments can be augumented at the current moment.
 	 * This method would throw an exception in collections and queries if data has
 	 * already been retrieved.

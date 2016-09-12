@@ -6,6 +6,14 @@ namespace Rila;
  */
 class Query implements \Iterator, \Countable {
 	use Query_Args;
+	
+	/**
+	 * Holds the actual, prepared arguments for WP_Query/get_posts.
+	 *
+	 * @since 0.1
+	 * @var mixed[]
+	 */
+	public $args = array();
 
 	/**
 	 * Holds the query for the posts.
