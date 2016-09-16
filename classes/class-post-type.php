@@ -284,7 +284,7 @@ class Post_Type extends Item {
 	 */
 	public function pagination( $args = array() ) {
 		$args[ 'echo' ] = false;
-		
+
 		return wp_link_pages( $args );
 	}
 
@@ -502,5 +502,27 @@ class Post_Type extends Item {
 		}
 
 		return parent::__call( $method, $args );
+	}
+
+	/**
+	 * Checks if the post is password protected.
+	 *
+	 * @since 0.1
+	 *
+	 * @return bool
+	 */
+	public function password_required() {
+		return post_password_required( $this->item );
+	}
+
+	/**
+	 * Handles the password form.
+	 *
+	 * @since 0.1
+	 *
+	 * @return string
+	 */
+	public function password_form() {
+		return get_the_password_form( $this->item );
 	}
 }
