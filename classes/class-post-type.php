@@ -4,6 +4,7 @@ namespace Rila;
 use Rila\Item;
 use Rila\Collection\Comments;
 use Rila\Missing_Object_Exception;
+use Rila\Taxonomy;
 
 /**
  * Encapsulates the WP_Post class in order to provide
@@ -255,6 +256,39 @@ class Post_Type extends Item {
 	}
 
 	/**
+	 * Returns the formatted content of the post.
+	 *
+	 * @since 0.1
+	 *
+	 * @return string
+	 */
+	public function content() {
+		if( is_singular() && $this->ID == get_queried_object_id() ) {
+			# Make sure the current post is globally set up
+			$GLOBALS[ 'post' ] = $this->item;
+			setup_postdata( $GLOBALS[ 'post' ] );
+
+			return get_the_content();
+		} else {
+			return apply_filters( 'the_content', $this->item->post_content );
+		}
+	}
+
+	/**
+	 * Handles post pagination.
+	 *
+	 * @since 0.1
+	 *
+	 * @param mixed[] $args Arguments for wp_link_pages().
+	 * @return string
+	 */
+	public function pagination( $args = array() ) {
+		$args[ 'echo' ] = false;
+		
+		return wp_link_pages( $args );
+	}
+
+	/**
 	 * Handles the excerpt.
 	 *
 	 * @return string
@@ -415,5 +449,58 @@ class Post_Type extends Item {
 	 */
 	public function __debugInfo() {
 		return (array) $this->item;
+	}
+
+	/**
+	 * Attempt calling a custom method.
+	 *
+	 * @since 0.1
+	 *
+	 * @param string $method The name of the method.
+	 * @param mixed[] $args The arguments for the method.
+	 * @return mixed
+	 */
+	public function __call( $method, $args ) {
+		# Check for taxonomy calls, ex. has_category( 'cat' ) and has_tax_classes( '20', '30' )
+		if( 0 === stripos( $method, 'has_' ) ) {
+			$taxonomy       = str_replace( 'has_', '', $method );
+			$terms_to_check = array();
+
+			# Check for a single call, ex. has_category()
+			foreach( self::$taxonomies[ 'singular' ] as $short => $full ) {
+				if( $short == $taxonomy ) {
+					$terms_to_check = array(
+						'taxonomy' => $full,
+						'terms'    => array( $args[ 0 ] )
+					);
+				}
+			}
+
+			# Check for a plural call, ex. has_categories()
+			foreach( self::$taxonomies[ 'plural' ] as $short => $full ) {
+				if( $short == $taxonomy ) {
+					$terms_to_check = array(
+						'taxonomy' => $full,
+						'terms'    => is_array( $args[ 0 ] ) ? $args[ 0 ] : $args
+					);
+				}
+			}
+
+			if( $terms_to_check ) {
+				$terms = array();
+
+				foreach( $terms_to_check[ 'terms' ] as $term ) {
+					if( is_a( $term, Taxonomy::class ) ) {
+						$term = $term->id;
+					}
+
+					$terms[] = $term;
+				}
+
+				return has_term( $terms, $terms_to_check[ 'taxonomy' ], $this->item->ID );
+			}
+		}
+
+		return parent::__call( $method, $args );
 	}
 }
