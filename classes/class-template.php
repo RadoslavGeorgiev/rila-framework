@@ -298,14 +298,23 @@ class Template {
 		$defaults = array(
 			'site'    => Site::instance(),
 			'query'   => new Query( $GLOBALS[ 'wp_query' ] ),
-			'post'    => is_404() ? false : Post_Type::factory(),
 			'request' => Request::instance(),
 			'theme'   => Theme::instance(),
 			'now'     => new Date
 		);
 
+		# Add the first post to the instance, if any.
+		if( have_posts() ) {
+			$defaults[ 'post' ] = Post_Type::factory();
+		} else {
+			$defaults[ 'post' ] = false;
+		}
+
+		# On singular terms, make the term available
 		if( is_tax() ) {
 			$defaults[ 'term' ] = Taxonomy::factory( get_queried_object() );
+		} else {
+			$defaults[ 'term' ] = false;
 		}
 
 		# Locate post types
