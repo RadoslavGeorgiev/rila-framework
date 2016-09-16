@@ -51,7 +51,7 @@ abstract class Block implements \ArrayAccess {
 
 		$data = $definition->get_hash();
 		$data[ 'name' ] = str_replace( '\\', '_ns_', $class_name );
-		$data[ 'key' ] = $class_name;
+		$data[ 'key' ] = str_replace( '\\', '_', $class_name );
 
 		return $data;
 	}
