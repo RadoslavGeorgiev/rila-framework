@@ -201,3 +201,29 @@ function rila_parse_args( $query ) {
 		'args' => $extra
 	);
 }
+
+/**
+ * Converts the dashes in array keys to underscores.
+ *
+ * @since 0.1
+ *
+ * @param mixed[] $arr The value to convert.
+ * @return mixed[]
+ */
+function rila_dashes_to_unserscores( $arr ) {
+	$result = array();
+
+	foreach( $arr as $key => $value ) {
+		if( is_array( $value ) ) {
+			$value = rila_dashes_to_unserscores( $value );
+		}
+
+		$result[ $key ] = $value;
+
+		if( false !== stripos( $key, '-' ) ) {
+			$result[ str_replace( '-', '_', $key ) ] = $value;
+		}
+	}
+
+	return $result;
+}

@@ -276,6 +276,9 @@ abstract class Item {
 				$this->meta[ $key ] = maybe_unserialize( $value );
 			}
 		}
+
+		# Replace dashes in keys with underscores
+		$this->meta = rila_dashes_to_unserscores( $this->meta );
 	}
 
 	/**
