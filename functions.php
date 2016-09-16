@@ -9,7 +9,7 @@
  * Returns an instance of the main class.
  *
  * @since 0.1
- * 
+ *
  * @return Rila\Plugin
  */
 function rila_framework() {
@@ -18,9 +18,9 @@ function rila_framework() {
 
 /**
  * Creates a new post object.
- * 
+ *
  * @since 0.1
- * 
+ *
  * @param mixed $id Either the ID of the post, a post object or a WP_Post object.
  * @return Post_Type
  */
@@ -34,9 +34,9 @@ function rila_post( $id = null ) {
 
 /**
  * Creates a new term object.
- * 
+ *
  * @since 0.1
- * 
+ *
  * @param mixed $term Either a term ID, a WP_Term or a Term object.
  * @return Term
  */
@@ -46,9 +46,9 @@ function rila_term( $term ) {
 
 /**
  * Returns the instance of the current site.
- * 
+ *
  * @since 0.1
- * 
+ *
  * @return Site
  */
 function rila_site() {
@@ -57,11 +57,11 @@ function rila_site() {
 
 /**
  * Creates a new view.
- * 
+ *
  * When using the view, you need to either return it or echo it, based on the context.
- * 
+ *
  * @since 0.1
- * 
+ *
  * @param string $name Either the name of the view (without .twig) or an array of names.
  * @param mixed[] $context The context for the view. The ->with( 'name', $value ) can be used too.
  * @return Template A template that can be manipulated or rendered.
@@ -72,57 +72,57 @@ function rila_view( $name, $context = array() ) {
 
 /**
  * Creates a new comment.
- * 
+ *
  * @since 0.1
- * 
+ *
  * @param mixed $comment Either a WP_Comment or a comment ID.
  * @return Comment
  */
 function rila_comment( $comment ) {
-	return new Rila\Comment( $comment );
+	return Rila\Comment::factory( $comment );
 }
 
 /**
  * Creates a new user object.
- * 
+ *
  * @since 0.1
- * 
+ *
  * @param mixed $user Either a WP_User or a user ID.
  * @return User
  */
 function rila_user( $user ) {
-	return new Rila\User( $user );
+	return Rila\User::factory( $user );
 }
 
 /**
  * Creates a new image object.
- * 
+ *
  * @since 0.1
- * 
+ *
  * @param int $id The ID of the image.
  * @return File
  */
 function rila_file( $file ) {
-	return new Rila\File( $file );
+	return Rila\File::factory( $file );
 }
 
 /**
  * Creates a new image object.
- * 
+ *
  * @since 0.1
- * 
+ *
  * @param int $id The ID of the image.
  * @return Image
  */
 function rila_image( $image ) {
-	return new Rila\Image( $image );
+	return Rila\Image::factory( $image );
 }
 
 /**
  * Creates a new date object.
- * 
+ *
  * @since 0.1
- * 
+ *
  * @param mixed $date THe date/time to use.
  * @return Date
  */
@@ -132,9 +132,9 @@ function rila_date( $date ) {
 
 /**
  * Creates a new query.
- * 
+ *
  * @since 0.1
- * 
+ *
  * @param mixed $request WP_Query arguments. Can also be an array of IDs for specific posts.
  * @return Query
  */
@@ -144,9 +144,9 @@ function rila_query( $request = array() ) {
 
 /**
  * Converts a linear array with dot notations to a nested one.
- * 
+ *
  * @since 0.1
- * 
+ *
  * @param mixed[] $data The flat array with keys like content_blocks.text.title.
  * @return mixed[] The nested array
  */
@@ -180,9 +180,9 @@ function rila_dot_to_array( $data ) {
 
 /**
  * Processes arguments for functions that are in URL-like format.
- * 
+ *
  * @since 0.1
- * 
+ *
  * @param mixed $query The needed query, ex. main-menu?menu_class=the-menu
  * @return moxed[]
  */

@@ -48,7 +48,7 @@ class Plugin {
 		$this->path = dirname( $path ) . '/';
 		define( 'RILA_FRAMEWORK_DIR', $this->path );
 
-		add_action( 'init', array( $this, 'initialize' ), -1 );
+		add_action( 'plugins_loaded', array( $this, 'initialize' ), -1 );
 
 		# Add the necesasry autoloaders
 		spl_autoload_register( array( $this, 'include_class' ) );
@@ -102,7 +102,7 @@ class Plugin {
 
 		foreach( $files as $file ) {
 			$path = $this->path . 'classes/' . $file;
-			
+
 			if( file_exists( $path ) ) {
 				include_once( $path );
 			}

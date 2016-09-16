@@ -173,6 +173,11 @@ class Meta implements \Iterator {
 
 		$shortcuts = self::shortcuts();
 
+		# Handle ACF repeaters separately if the map is an array (two levels)
+		if( is_array( $map[ $property ] ) && ! isset( $map[ $property ][ 0 ] ) ) {
+			return new Meta( $value, $map[ $property ] );
+		}
+
 		# Treat maps as arrays
 		foreach( (array) $map[ $property ] as $map_to ) {
 			$is_array = is_string( $map_to ) && preg_match( '~\[\]$~', $map_to );

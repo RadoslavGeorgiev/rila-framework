@@ -67,13 +67,9 @@ class Builder implements \Iterator, \Countable {
 	 * @since 0.1
 	 */
 	protected function init() {
-		static $did_it;
-
-		if( $did_it || ! $this->data ) {
+		if( ! empty( $this->blocks ) || empty( $this->data ) ) {
 			return;
 		}
-
-		$did_it = true;
 
 		foreach( $this->data as $block ) {
 			if( ! isset( $block[ '__type' ] ) )
