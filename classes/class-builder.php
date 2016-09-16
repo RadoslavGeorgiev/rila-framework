@@ -167,11 +167,18 @@ class Builder implements \Iterator, \Countable {
 
 		foreach( $this->blocks as $block ) {
 			$simplified = get_class( $block );
+			$parts = explode( $simplified, '\\' );
+
+			# Remove prefixes and suffixes
 			$simplified = str_replace( 'Rila\\', '', $simplified );
 			$simplified = preg_replace( '~^Block_~', '', $simplified );
 			$simplified = preg_replace( '~_Block$~', '', $simplified );
+
+			# Only use lowercase
 			$simplified = strtolower( $simplified );
-			$simplified = str_replace( '_', '-', $simplified );
+
+			# Remove misc. characters
+			$simplified = preg_replace( '~[_\\\\\s]~', '-', $simplified );
 
 			/**
 			 * Allows the opening element for a block to be modified.
