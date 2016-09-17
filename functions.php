@@ -143,6 +143,32 @@ function rila_query( $request = array() ) {
 }
 
 /**
+ * Registers a post type or a taxonomy class by adding the neccessary hooks.
+ *
+ * @since 0.1
+ *
+ * @param string $classname The class to be registered.
+ */
+	if(
+		! is_subclass_of( $classname, 'Rila\\Post_Type' )
+		&& ! is_subclass_of( $classname, 'Rila\\Taxonomy' )
+	) {
+		throw new Exception( "Only post types and taxonomies can be registered!" );
+	}
+
+	if( method_exists( $classname, 'register' ) ) {
+		add_action( 'init', array( $classname, 'register' ) );
+	}
+
+	if(
+		method_exists( $classname, 'register_fields' )
+		&& function_exists( 'acf_add_local_field_group' )
+	) {
+		add_action( 'register_acf_groups', array( $classname, 'register_fields' ) );
+	}
+}
+
+/**
  * Converts a linear array with dot notations to a nested one.
  *
  * @since 0.1
