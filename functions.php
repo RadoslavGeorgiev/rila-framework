@@ -149,6 +149,7 @@ function rila_query( $request = array() ) {
  *
  * @param string $classname The class to be registered.
  */
+function rila_register_class( $classname ) {
 	if(
 		! is_subclass_of( $classname, 'Rila\\Post_Type' )
 		&& ! is_subclass_of( $classname, 'Rila\\Taxonomy' )
