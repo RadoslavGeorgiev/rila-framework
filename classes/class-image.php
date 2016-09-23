@@ -68,7 +68,6 @@ class Image extends File {
 	 */
 	public function get( $property ) {
 		if( in_array( $property, self::get_image_sizes() ) ) {
-			echo "Changing sizes";
 			$image = clone $this;
 			$image->size = $property;
 			return $image;
