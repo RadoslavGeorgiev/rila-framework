@@ -21,6 +21,13 @@ class User extends Item {
 	protected $user;
 
 	/**
+	 * Holds the default exportable properties.
+	 *
+	 * @since 0.1.1
+	 */
+	protected $exportable = array( 'id', 'name', 'url' );
+
+	/**
 	 * Constructs the item by receiving user data.
 	 *
 	 * @since 0.1

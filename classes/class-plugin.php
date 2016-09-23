@@ -55,6 +55,9 @@ class Plugin {
 
 		# Include basic files
 		include_once( $this->path . 'functions.php' );
+
+		# Add AJAX listeners
+		add_action( 'template_redirect', array( $this, 'ajax' ) );
 	}
 
 	/**
@@ -106,6 +109,36 @@ class Plugin {
 			if( file_exists( $path ) ) {
 				include_once( $path );
 			}
+		}
+	}
+
+	/**
+	 * Handles AJAX calls for the API.
+	 *
+	 * @since 0.1.1
+	 */
+	public function ajax() {
+		if( ! isset( $_GET[ 'rila_load' ] ) ) {
+			return;
+		}
+
+		$load = trim( $_GET[ 'rila_load' ] );
+		$load = explode( ';', $load );
+		$type = array_shift( $load );
+
+		switch( $type ) {
+			case 'terms':
+				$data = array();
+
+				$collection = new Collection\Terms( array_map( 'intval', $load ) );
+				foreach( $collection as $term ) {
+					$data[] = $term->export();
+				}
+
+				echo json_encode( $data );
+				exit;
+
+				break;
 		}
 	}
 }

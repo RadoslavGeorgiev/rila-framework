@@ -8,6 +8,13 @@ namespace Rila;
  */
 class ACF_Helper {
 	/**
+	 * Holds all fetched options.
+	 *
+	 * @since 0.1
+	 */
+	protected $options = array();
+	
+	/**
 	 * Creates a singular instance of the class.
 	 *
 	 * @since 0.1

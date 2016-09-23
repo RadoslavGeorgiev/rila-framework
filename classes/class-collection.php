@@ -351,4 +351,26 @@ class Collection implements \Iterator, \Countable  {
 	public function count() {
 		return count( $this->items );
 	}
+
+	/**
+	 * Exports the collection to simple arrays.
+	 *
+	 * @since 0.1.1
+	 *
+	 * @return mixed[]
+	 */
+	public function export() {
+		$data = array(
+			'__type' => get_class( $this ),
+			'items'  => array()
+		);
+
+		$this->check();
+
+		foreach( $this->items as $item ) {
+			$data[ 'items' ][] = $item->id;
+		}
+
+		return $data;
+	}
 }

@@ -14,6 +14,13 @@ use Rila\Missing_Object_Exception;
  */
 class Taxonomy extends Item {
 	/**
+	 * Holds the default exportable properties.
+	 *
+	 * @since 0.1.1
+	 */
+	protected $exportable = array( 'id', 'name', 'slug', 'parent', 'url' );
+
+	/**
 	 * Constructs the item by receiving post data.
 	 *
 	 * @since 0.1
@@ -79,7 +86,7 @@ class Taxonomy extends Item {
 	 */
 	protected function initialize() {
 		parent::initialize();
-		
+
 		$this->translate(array(
 			'id'    => 'term_id',
 			'title' => 'name'

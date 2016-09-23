@@ -54,7 +54,8 @@ class Twig extends Engine {
 			'sanitize' => 'sanitize_title',
 			'p'        => 'wpautop',
 			'ucwords'  => 'ucwords',
-			'dump'     => array( $this, 'dump' )
+			'dump'     => array( $this, 'dump' ),
+			'json'     => array( $this, 'json' ),
 		);
 
 		foreach( $filters as $filter => $func ) {
@@ -95,7 +96,7 @@ class Twig extends Engine {
 
 	/**
 	 * Locates an SVG and includes it.
-	 * 
+	 *
 	 * @since 0.1
 	 *
 	 * @param string $name The name of the SVG
@@ -111,9 +112,9 @@ class Twig extends Engine {
 
 	/**
 	 * Dumps an item.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @param mixed $item THe item that is to be dumpled.
 	 */
 	public function dump( $item ) {
@@ -124,14 +125,26 @@ class Twig extends Engine {
 
 	/**
 	 * Displays WooCommerce's content.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @return string An empty displayable string.
 	 */
 	public function woo() {
 		woocommerce_content();
 
 		return '';
+	}
+
+	/**
+	 * Converts something to JSON.
+	 *
+	 * @since 0.1.1
+	 *
+	 * @param mixed $data The data to convert.
+	 * @return string
+	 */
+	public function json( $data ) {
+		return json_encode( $data );
 	}
 }

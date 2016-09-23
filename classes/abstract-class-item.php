@@ -459,4 +459,34 @@ abstract class Item {
 	public function __clone() {
 		$this->cache = array();
 	}
+
+	/**
+	 * Exports values from the item.
+	 *
+	 * @since 0.1.1
+	 *
+	 * @param string[] $keys The keys of the values to export.
+	 * @return mixed[]
+	 */
+	public function export( $keys = array() ) {
+		$data = array(
+			'__type' => get_class( $this )
+		);
+
+		if( empty( $keys ) ) {
+			$keys = $this->exportable;
+		}
+
+		foreach( $keys as $key ) {
+			$var = $this->__get( $key );
+
+			if( method_exists( $var, 'export' ) ) {
+				$var = $var->export();
+			}
+
+			$data[ $key ] = $var;
+		}
+
+		return $data;
+	}
 }
