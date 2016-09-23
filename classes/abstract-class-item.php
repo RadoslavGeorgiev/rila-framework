@@ -450,4 +450,13 @@ abstract class Item {
 
 		trigger_error( 'Call to undefined method ' . __CLASS__ . '::' . $method . '()', E_USER_ERROR );
 	}
+
+	/**
+	 * When cloning an item, clear the cache.
+	 *
+	 * @since 0.1
+	 */
+	public function __clone() {
+		$this->cache = array();
+	}
 }
