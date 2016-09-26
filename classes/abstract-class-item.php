@@ -215,6 +215,31 @@ abstract class Item {
 		return $returnable;
 	}
 
+	/**
+	 * Returns a raw property, if one is available.
+	 *
+	 * @since 0.1
+	 *
+	 * @param string $property The name of the property.
+	 * @return mixed[]
+	 */
+	public function raw( $property ) {
+		# Translate the property for further calls
+		$property = $this->translate_property( $property );
+
+		# Priority 1: Meta values
+		if( isset( $this->meta[ $property ] ) ) {
+			return $this->meta[ $property ];
+		}
+
+		# Check the raw item.
+		if( property_exists( $this->item, $property ) ) {
+			return $this->item->$property;
+		}
+
+		return false;
+	}
+
 	 /**
 	  * Uses the dictionary to translate a property.
 	  *
