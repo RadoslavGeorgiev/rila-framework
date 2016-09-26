@@ -275,3 +275,35 @@ function rila_cleanup_class( $class_name, $type = '' ) {
 
 	return $class_name;
 }
+
+/**
+ * Attempts converting a Twig template to a string.
+ * If errors occur, they will be returned as a string.
+ *
+ * @since 0.1
+ *
+ * @param object $object The object that should be converted to a string.
+ * @param string $method The name of the method that can avoid __toString().
+ * @return string
+ */
+function rila_convert_to_string( $object, $method ) {
+	if( ! is_object( $object ) || ! method_exists( $object, $method ) ) {
+		return 'rila_convert_to_string() can only work with a class that has a ' . $method . '() method.';
+	}
+
+	try {
+		$result = call_user_func( array( $object, $method ) );
+
+		if( is_a( $result, 'Rila\\Template' ) ) {
+			$result = $result->render();
+		}
+
+		return $result;
+	} catch( Exception $e ) {
+		return sprintf(
+			"<strong>\"%s\" exception thrown, but not caught: </strong> %s",
+			get_class( $e ),
+			esc_html( $e->getMessage() )
+		);
+	}
+}

@@ -161,12 +161,13 @@ class Builder implements \Iterator, \Countable {
 	}
 
 	/**
-	 * Converts the whole builder to a string by rendering it's content.
+	 * Renders the builder and it's blocks.
 	 *
 	 * @since 0.1
-	 * @return string
+	 *
+	 * @return string The full HTML of the builder and its blocks.
 	 */
-	public function __toString() {
+	public function render() {
 		$this->init();
 		$out = '';
 
@@ -178,30 +179,40 @@ class Builder implements \Iterator, \Countable {
 			$simplified = preg_replace( '~[_\\\\\s]~', '-', $simplified );
 
 			/**
-			 * Allows the opening element for a block to be modified.
-			 *
-			 * @since 0.1
-			 *
-			 * @param string $html  The opening HTML.
-			 * @param Block  $block The block and it's data.
-			 * @return string
-			 */
+			* Allows the opening element for a block to be modified.
+			*
+			* @since 0.1
+			*
+			* @param string $html  The opening HTML.
+			* @param Block  $block The block and it's data.
+			* @return string
+			*/
 			$before = apply_filters( 'rila.builder.before_block', '<div class="block block-' . $simplified . '">', $block );
 
 			/**
-			 * Allows the closing element for a block to be modified.
-			 *
-			 * @since 0.1
-			 *
-			 * @param string $html  The closing HTML.
-			 * @param Block  $block The block and it's data.
-			 * @return string
-			 */
+			* Allows the closing element for a block to be modified.
+			*
+			* @since 0.1
+			*
+			* @param string $html  The closing HTML.
+			* @param Block  $block The block and it's data.
+			* @return string
+			*/
 			$after = apply_filters( 'rila.builder.after_block', '</div>', $block );
 
-			$out .= $before . $block . $after;
+			$out .= $before . $block->toString() . $after;
 		}
 
 		return $out;
+	}
+
+	/**
+	 * Converts the whole builder to a string by rendering it's content.
+	 *
+	 * @since 0.1
+	 * @return string
+	 */
+	public function __toString() {
+		return rila_convert_to_string( $this, 'render' );
 	}
 }

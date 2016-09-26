@@ -90,6 +90,19 @@ abstract class Block implements \ArrayAccess {
 	 * @return string
 	 */
 	public function __toString() {
+		return rila_convert_to_string( $this, 'toString' );
+	}
+
+	/**
+	 * Converts the block to a string.
+	 * This is a public function, which is used in blocks, in order to avoid
+	 * meaningless messages about __toString throwing exceptions.
+	 *
+	 * @since 0.1
+	 *
+	 * @return string
+	 */
+	public final function toString() {
 		# Map values first
 		if( method_exists( $this, 'map' ) ) {
 			$map  = rila_dot_to_array( $this->map() );
@@ -102,7 +115,7 @@ abstract class Block implements \ArrayAccess {
 			$this->data = $data;
 		}
 
-		return (string) $this->render( $this->data );
+		return $this->render( $this->data );
 	}
 
 	/**
