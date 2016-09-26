@@ -247,8 +247,6 @@ abstract class Item {
 	  * @return string
 	  */
 	protected function translate_property( $property ) {
-		$class_name = get_class( $this );
-
  		if( isset( $this->dictionary[ $property ] ) ) {
  			return $this->dictionary[ $property ];
  		}

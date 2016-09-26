@@ -63,7 +63,8 @@ abstract class Custom_Widget extends \WP_Widget {
 		}
 
 		# Generate title and ID automatically
-		$this->id = strtolower( str_replace( '\\', '_', get_class( $this ) ) );
+		$simplified = rila_cleanup_class( get_class( $this ), 'Widget' );
+		$this->id = strtolower( $simplified );
 		$this->title = ucwords( str_replace( '_', ' ', $this->id ) );
 
 		$this->initialize();

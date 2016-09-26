@@ -254,3 +254,24 @@ function rila_dashes_to_unserscores( $arr ) {
 
 	return $result;
 }
+
+/**
+ * Cleans a class name up from namespaces, prefixes and suffixes.
+ *
+ * @since 0.1
+ *
+ * @param string $class_name The name that needs to be cleaned up.
+ * @param string $type       A type that would be used as a prefix or a suffix.
+ * @return string            The cleaned-up class
+ */
+function rila_cleanup_class( $class_name, $type = '' ) {
+	$class_name = preg_replace( '~.*\\\\~', '', $class_name );
+
+	# Remove "Block_" from "Block_Text" and "_Widget" from "Text_Widget"
+	if( '' != $type ) {
+		$class_name = preg_replace( '~^' . preg_quote( $type ) . '_~', '', $class_name );
+		$class_name = preg_replace( '~_' . preg_quote( $type ) . '$~', '', $class_name );
+	}
+
+	return $class_name;
+}

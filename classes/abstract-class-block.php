@@ -75,11 +75,9 @@ abstract class Block implements \ArrayAccess {
 	 */
 	protected function render( $data ) {
 		# Use the default block
-		$block = strtolower( get_class( $this ) );
-		$block = preg_replace( '~^block_~', '', $block );
-		$block = preg_replace( '~_block$~', '', $block );
+		$block = strtolower( rila_cleanup_class( get_class( $this ), 'Block' ) );
 		$block = str_replace( '_', '-', $block );
-		$block = 'blocks/' . $block;
+		$block = 'block/' . $block;
 
 		return rila_view( $block, $data );
 	}

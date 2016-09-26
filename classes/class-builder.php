@@ -77,6 +77,11 @@ class Builder implements \Iterator, \Countable {
 
 			$type = $block[ '__type' ];
 			$type = str_replace( '_ns_', '\\', $type );
+
+			if( ! class_exists( $type ) ) {
+				continue;
+			}
+
 			$block = new $type( $block );
 
 			if( ! $block->skip() ) {
@@ -166,15 +171,7 @@ class Builder implements \Iterator, \Countable {
 		$out = '';
 
 		foreach( $this->blocks as $block ) {
-			$simplified = get_class( $block );
-			$parts = explode( $simplified, '\\' );
-
-			# Remove prefixes and suffixes
-			$simplified = str_replace( 'Rila\\', '', $simplified );
-			$simplified = preg_replace( '~^Block_~', '', $simplified );
-			$simplified = preg_replace( '~_Block$~', '', $simplified );
-
-			# Only use lowercase
+			$simplified = rila_cleanup_class( get_class( $block ), 'Block' );
 			$simplified = strtolower( $simplified );
 
 			# Remove misc. characters
