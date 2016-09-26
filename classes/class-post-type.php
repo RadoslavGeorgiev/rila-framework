@@ -138,8 +138,8 @@ class Post_Type extends Item {
 		}
 
 		foreach( get_taxonomies() as $taxonomy ) {
-			if( defined( 'rila_post_TYPE_PREFIX' ) ) {
-				$pure = str_replace( rila_post_TYPE_PREFIX, '', $taxonomy );
+			if( defined( 'RILA_POST_TYPE_PREFIX' ) ) {
+				$pure = str_replace( RILA_POST_TYPE_PREFIX, '', $taxonomy );
 			} else {
 				$pure = $taxonomy;
 			}

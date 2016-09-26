@@ -150,23 +150,7 @@ function rila_query( $request = array() ) {
  * @param string $classname The class to be registered.
  */
 function rila_register_class( $classname ) {
-	if(
-		! is_subclass_of( $classname, 'Rila\\Post_Type' )
-		&& ! is_subclass_of( $classname, 'Rila\\Taxonomy' )
-	) {
-		throw new Exception( "Only post types and taxonomies can be registered!" );
-	}
-
-	if( method_exists( $classname, 'register' ) ) {
-		add_action( 'init', array( $classname, 'register' ) );
-	}
-
-	if(
-		method_exists( $classname, 'register_fields' )
-		&& function_exists( 'acf_add_local_field_group' )
-	) {
-		add_action( 'register_acf_groups', array( $classname, 'register_fields' ) );
-	}
+	new Rila\Class_Handler( $classname );
 }
 
 /**

@@ -167,4 +167,25 @@ class User extends Item {
 		return $this->user->has_cap( $capability );
 	}
 
+	/**
+	 * Creates a new group of fields and directly associates it with users.
+	 *
+	 * @since 0.1
+	 * @link https://github.com/RadoslavGeorgiev/acf-code-helper
+	 *
+	 * @param string  $title   The title of the metabox.
+	 * @param mixed[] $fields The fields to add in the metabox.
+	 * @return ACF_Group The created ACF_Group, which can be modified further.
+	 */
+	protected static function add_fields( $title, $fields ) {
+		$caller = get_called_class();
+		$slug   = self::get_registered_slug( $caller );
+		$id     = self::unique_id( $slug );
+
+		$location = new \ACF_Group_Location();
+		$location->add_rule( 'user_form', 'all' );
+
+		return self::_add_fields( $id, $title, $location, $fields );
+	}
+
 }
