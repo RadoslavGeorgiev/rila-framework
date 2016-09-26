@@ -127,7 +127,7 @@ class Meta implements \Iterator {
      *
      * @return string[]
      */
-    protected static function shortcuts() {
+    public static function shortcuts() {
     	static $shortcuts;
 
     	if( ! is_null( $shortcuts ) ) {

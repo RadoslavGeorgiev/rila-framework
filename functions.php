@@ -6,6 +6,90 @@
  */
 
 /**
+ * Transforms various types to the appropriate Rila object.
+ *
+ * @since 0.1
+ * @see https://github.com/RadoslavGeorgiev/rila-framework/wiki/The-rila-function
+ *
+ * @param mixed $item The item that should be wrapped by the framework.
+ * @return mixed
+ */
+function rila( $item = null ) {
+	static $pairs;
+
+	# An empty parameter means a posts collection
+	if( is_null( $item ) ) {
+		return new Rila\Collection\Posts;
+	}
+
+	# For integers, return a simple post
+	if( is_null( $item ) || is_int( $item ) ) {
+		if( is_null( $item ) ) {
+			$item = get_the_id();
+		}
+
+		return Rila\Post_Type::factory( $item );
+	}
+
+	# Check standard objects
+	if( is_object( $item ) ) {
+		if( is_null( $pairs ) ) {
+			$pairs = array(
+				'WP_Post'    => 'Rila\\Post_Type',
+				'WP_Term'    => 'Rila\\Taxonomy',
+				'WP_User'    => 'Rila\\User',
+				'WP_Comment' => 'Rila\\Comment',
+				'WP_Site'    => 'Rila\\Site',
+				'WP_Query'   => 'Rila\\Query'
+			);
+		}
+
+		foreach( $pairs as $cn => $wrapper ) {
+			if( is_a( $item, $wrapper ) ) {
+				return $item;
+			}
+
+			if( is_a( $item, $cn ) ) {
+				return call_user_func( array( $wrapper, 'factory' ), $item );
+			}
+		}
+	}
+
+	# Check for URLs and embeds
+	if( is_string( $item ) && filter_var( $item, FILTER_VALIDATE_URL ) ) {
+		return new Rila\Embed( $item );
+	}
+
+	# Check string-type pairs
+	if( is_string( $item ) ) foreach( Rila\Meta::shortcuts() as $keyword => $target ) {
+		if( 0 !== strpos( $item, $keyword . '_' ) )
+			continue;
+
+		$value = preg_replace( '~^' . preg_quote( $keyword ) . '_~i', '', $item );
+
+		/**
+		 * @Todo: Extract the one-value functionality of "map" and use without a hack.
+		 */
+		return Rila\Meta::map( $value, 'temp', array(
+			'temp' => $keyword
+		));
+	}
+
+	# Try content blocks
+	if( is_array( $item ) && isset( $item[ '__type' ] ) ) {
+		$cn = $item[ '__type' ];
+		$cn = str_replace( '_ns_', '\\', $cn );
+
+		if( class_exists( $cn ) && is_subclass_of( $cn, 'Rila\\Block' ) ) {
+			return new $cn( $item );
+		}
+	}
+
+	# Return the item itself
+	return $item;
+}
+
+/**
  * Returns an instance of the main class.
  *
  * @since 0.1
