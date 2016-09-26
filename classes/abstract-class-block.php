@@ -76,6 +76,8 @@ abstract class Block implements \ArrayAccess {
 	protected function render( $data ) {
 		# Use the default block
 		$block = strtolower( get_class( $this ) );
+        $block = explode( '\\', $block );
+        $block = array_pop( $block );
 		$block = preg_replace( '~^block_~', '', $block );
 		$block = preg_replace( '~_block$~', '', $block );
 		$block = str_replace( '_', '-', $block );
