@@ -148,14 +148,14 @@ abstract class Item {
 			}
 		}
 
+		# Translate the property for further calls
+		$original = $property;
+		$property = $this->translate_property( $property );
+
 		# Priority 1: Custom methods
 		if( method_exists( $this, $property ) ) {
 			$returnable = $this->$property();
 		}
-
-		# Translate the property for further calls
-		$original = $property;
-		$property = $this->translate_property( $property );
 
 		# Priority 2: Meta values
 		if( ! isset( $returnable ) && isset( $this->meta[ $property ] ) ) {

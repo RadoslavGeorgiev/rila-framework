@@ -9,6 +9,7 @@ Rila is a data-oriented framework for WordPress with rapid front-end development
 - Built with extensibility in mind: You can finally separate your logic from your views properly.
 - Well-documented code and thorough documentation
 - Extremely intuitive
+- Smart default context: Everything, related to the current page is already available and waiting for you.
 
 ## Quick example
 Your *single.php* (controller) file:
