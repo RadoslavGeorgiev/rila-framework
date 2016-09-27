@@ -311,7 +311,7 @@ class Template {
 		}
 
 		# On singular terms, make the term available
-		if( is_tax() ) {
+		if( is_tax() || is_category() || is_tag() ) {
 			$defaults[ 'term' ] = Taxonomy::factory( get_queried_object() );
 		} else {
 			$defaults[ 'term' ] = false;

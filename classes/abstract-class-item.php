@@ -301,7 +301,7 @@ abstract class Item {
 		}
 
 		# Replace dashes in keys with underscores
-		$this->meta = rila_dashes_to_unserscores( $this->meta );
+		$this->meta = rila_dashes_to_underscrores( $this->meta );
 	}
 
 	/**

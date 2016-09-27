@@ -305,12 +305,12 @@ function rila_parse_args( $query ) {
  * @param mixed[] $arr The value to convert.
  * @return mixed[]
  */
-function rila_dashes_to_unserscores( $arr ) {
+function rila_dashes_to_underscrores( $arr ) {
 	$result = array();
 
 	foreach( $arr as $key => $value ) {
 		if( is_array( $value ) ) {
-			$value = rila_dashes_to_unserscores( $value );
+			$value = rila_dashes_to_underscrores( $value );
 		}
 
 		$result[ $key ] = $value;

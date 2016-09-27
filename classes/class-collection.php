@@ -349,6 +349,8 @@ class Collection implements \Iterator, \Countable  {
 	 * @return int
 	 */
 	public function count() {
+		$this->check();
+		
 		return count( $this->items );
 	}
 
@@ -361,7 +363,7 @@ class Collection implements \Iterator, \Countable  {
 	 */
 	public function __debugInfo() {
 		$this->check();
-		
+
 		return $this->items;
 	}
 }
