@@ -71,10 +71,12 @@ class Builder implements \Iterator, \Countable {
 			return;
 		}
 
+		$index = 0;
 		foreach( $this->data as $block ) {
 			if( ! isset( $block[ '__type' ] ) )
 				continue;
 
+			$block['__index'] = $index++;
 			$type = $block[ '__type' ];
 			$type = str_replace( '_ns_', '\\', $type );
 
