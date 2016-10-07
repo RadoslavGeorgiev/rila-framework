@@ -2,7 +2,7 @@
 namespace Rila;
 
 use Rila\Item;
-use Rila\Query;
+use Rila\Collection\Posts;
 use Rila\Collection\Terms;
 use Rila\Missing_Object_Exception;
 
@@ -96,15 +96,15 @@ class Taxonomy extends Item {
 	 * @return Templater\Query
 	 */
 	public function posts() {
-		return new Query(array(
-			'post_type' => 'any',
-			'tax_query' => array(
-				array(
-					'taxonomy' => $this->item->taxonomy,
-					'terms'    => $this->item->term_id
-				)
-			)
-		));
+        return new Posts(array(
+            'post_type' => 'any',
+            'tax_query' => array(
+                array(
+                    'taxonomy' => $this->item->taxonomy,
+                    'terms'    => $this->item->term_id
+                )
+            )
+        ));
 	}
 
 	/**
