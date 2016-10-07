@@ -71,12 +71,19 @@ class Builder implements \Iterator, \Countable {
 			return;
 		}
 
+		$index = 0;
 		foreach( $this->data as $block ) {
 			if( ! isset( $block[ '__type' ] ) )
 				continue;
 
+			$block['__index'] = $index++;
 			$type = $block[ '__type' ];
 			$type = str_replace( '_ns_', '\\', $type );
+
+			if( ! class_exists( $type ) ) {
+				continue;
+			}
+
 			$block = new $type( $block );
 
 			if( ! $block->skip() ) {
@@ -156,55 +163,58 @@ class Builder implements \Iterator, \Countable {
 	}
 
 	/**
-	 * Converts the whole builder to a string by rendering it's content.
+	 * Renders the builder and it's blocks.
 	 *
 	 * @since 0.1
-	 * @return string
+	 *
+	 * @return string The full HTML of the builder and its blocks.
 	 */
-	public function __toString() {
+	public function render() {
 		$this->init();
 		$out = '';
 
 		foreach( $this->blocks as $block ) {
-			$simplified = get_class( $block );
-			$parts = explode( $simplified, '\\' );
-
-			# Remove prefixes and suffixes
-			$simplified = str_replace( 'Rila\\', '', $simplified );
-			$simplified = preg_replace( '~^Block_~', '', $simplified );
-			$simplified = preg_replace( '~_Block$~', '', $simplified );
-
-			# Only use lowercase
+			$simplified = rila_cleanup_class( get_class( $block ), 'Block' );
 			$simplified = strtolower( $simplified );
 
 			# Remove misc. characters
 			$simplified = preg_replace( '~[_\\\\\s]~', '-', $simplified );
 
 			/**
-			 * Allows the opening element for a block to be modified.
-			 *
-			 * @since 0.1
-			 *
-			 * @param string $html  The opening HTML.
-			 * @param Block  $block The block and it's data.
-			 * @return string
-			 */
+			* Allows the opening element for a block to be modified.
+			*
+			* @since 0.1
+			*
+			* @param string $html  The opening HTML.
+			* @param Block  $block The block and it's data.
+			* @return string
+			*/
 			$before = apply_filters( 'rila.builder.before_block', '<div class="block block-' . $simplified . '">', $block );
 
 			/**
-			 * Allows the closing element for a block to be modified.
-			 *
-			 * @since 0.1
-			 *
-			 * @param string $html  The closing HTML.
-			 * @param Block  $block The block and it's data.
-			 * @return string
-			 */
+			* Allows the closing element for a block to be modified.
+			*
+			* @since 0.1
+			*
+			* @param string $html  The closing HTML.
+			* @param Block  $block The block and it's data.
+			* @return string
+			*/
 			$after = apply_filters( 'rila.builder.after_block', '</div>', $block );
 
-			$out .= $before . $block . $after;
+			$out .= $before . $block->toString() . $after;
 		}
 
 		return $out;
+	}
+
+	/**
+	 * Converts the whole builder to a string by rendering it's content.
+	 *
+	 * @since 0.1
+	 * @return string
+	 */
+	public function __toString() {
+		return rila_convert_to_string( $this, 'render' );
 	}
 }

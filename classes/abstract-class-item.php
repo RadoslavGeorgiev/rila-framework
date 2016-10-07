@@ -148,14 +148,14 @@ abstract class Item {
 			}
 		}
 
+		# Translate the property for further calls
+		$original = $property;
+		$property = $this->translate_property( $property );
+
 		# Priority 1: Custom methods
 		if( method_exists( $this, $property ) ) {
 			$returnable = $this->$property();
 		}
-
-		# Translate the property for further calls
-		$original = $property;
-		$property = $this->translate_property( $property );
 
 		# Priority 2: Meta values
 		if( ! isset( $returnable ) && isset( $this->meta[ $property ] ) ) {
@@ -215,6 +215,31 @@ abstract class Item {
 		return $returnable;
 	}
 
+	/**
+	 * Returns a raw property, if one is available.
+	 *
+	 * @since 0.1
+	 *
+	 * @param string $property The name of the property.
+	 * @return mixed[]
+	 */
+	public function raw( $property ) {
+		# Translate the property for further calls
+		$property = $this->translate_property( $property );
+
+		# Priority 1: Meta values
+		if( isset( $this->meta[ $property ] ) ) {
+			return $this->meta[ $property ];
+		}
+
+		# Check the raw item.
+		if( property_exists( $this->item, $property ) ) {
+			return $this->item->$property;
+		}
+
+		return false;
+	}
+
 	 /**
 	  * Uses the dictionary to translate a property.
 	  *
@@ -222,8 +247,6 @@ abstract class Item {
 	  * @return string
 	  */
 	protected function translate_property( $property ) {
-		$class_name = get_class( $this );
-
  		if( isset( $this->dictionary[ $property ] ) ) {
  			return $this->dictionary[ $property ];
  		}
@@ -278,7 +301,7 @@ abstract class Item {
 		}
 
 		# Replace dashes in keys with underscores
-		$this->meta = rila_dashes_to_unserscores( $this->meta );
+		$this->meta = rila_dashes_to_underscrores( $this->meta );
 	}
 
 	/**
@@ -449,5 +472,14 @@ abstract class Item {
 		}
 
 		trigger_error( 'Call to undefined method ' . __CLASS__ . '::' . $method . '()', E_USER_ERROR );
+	}
+
+	/**
+	 * When cloning an item, clear the cache.
+	 *
+	 * @since 0.1
+	 */
+	public function __clone() {
+		$this->cache = array();
 	}
 }

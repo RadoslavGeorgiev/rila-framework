@@ -13,6 +13,14 @@ class Image extends File {
 	public $size = 'full';
 
 	/**
+	 * Caches attributes.
+	 *
+	 * @since 0.1
+	 * @var mixed[]
+	 */
+	protected $attr_cache = array();
+
+	/**
 	 * Handles type-specific actions, like translations, etc.
 	 *
 	 * @since 0.1
@@ -52,16 +60,17 @@ class Image extends File {
 
 	/**
 	 * Adds easier shortcuts for within templates.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @param string $property The needed property.
 	 * @return mixed
 	 */
 	public function get( $property ) {
 		if( in_array( $property, self::get_image_sizes() ) ) {
-			$this->size = $property;
-			return $this;
+			$image = clone $this;
+			$image->size = $property;
+			return $image;
 		}
 
 		$attributes = $this->image_attributes();
@@ -91,7 +100,7 @@ class Image extends File {
 
 	/**
 	 * Returns all available image sizes.
-	 * 
+	 *
 	 * @since 0.1
 	 * @return string
 	 */
@@ -127,16 +136,14 @@ class Image extends File {
 
 	/**
 	 * Prepaares the image attributes.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @return mixed[]
 	 */
 	protected function image_attributes() {
-		static $attr;
-
-		if( ! is_null( $attr ) ) {
-			return $attr;
+		if( isset( $this->attr_cache[ $this->size ] ) ) {
+			return $this->attr_cache[ $this->size ];
 		}
 
 		$alt = isset( $this->meta[ '_wp_attachment_image_alt' ] )
@@ -160,10 +167,13 @@ class Image extends File {
 
 		/**
 		 * Allows the alt tag to be modified before using it.
-		 * 
+		 *
 		 * @see wp-includes/media.php
 		 */
 		$attr = apply_filters( 'wp_get_attachment_image_attributes', $attr, $this->item, $this->size );
+
+		# Cache the attributes
+		$this->attr_cache[ $this->size ] = $attr;
 
 		return $attr;
 	}

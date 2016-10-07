@@ -75,13 +75,9 @@ abstract class Block implements \ArrayAccess {
 	 */
 	protected function render( $data ) {
 		# Use the default block
-		$block = strtolower( get_class( $this ) );
-        $block = explode( '\\', $block );
-        $block = array_pop( $block );
-		$block = preg_replace( '~^block_~', '', $block );
-		$block = preg_replace( '~_block$~', '', $block );
+		$block = strtolower( rila_cleanup_class( get_class( $this ), 'Block' ) );
 		$block = str_replace( '_', '-', $block );
-		$block = 'blocks/' . $block;
+		$block = 'block/' . $block;
 
 		return rila_view( $block, $data );
 	}
@@ -94,6 +90,19 @@ abstract class Block implements \ArrayAccess {
 	 * @return string
 	 */
 	public function __toString() {
+		return rila_convert_to_string( $this, 'toString' );
+	}
+
+	/**
+	 * Converts the block to a string.
+	 * This is a public function, which is used in blocks, in order to avoid
+	 * meaningless messages about __toString throwing exceptions.
+	 *
+	 * @since 0.1
+	 *
+	 * @return string
+	 */
+	public final function toString() {
 		# Map values first
 		if( method_exists( $this, 'map' ) ) {
 			$map  = rila_dot_to_array( $this->map() );
@@ -106,7 +115,7 @@ abstract class Block implements \ArrayAccess {
 			$this->data = $data;
 		}
 
-		return (string) $this->render( $this->data );
+		return $this->render( $this->data );
 	}
 
 	/**

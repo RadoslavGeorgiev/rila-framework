@@ -123,8 +123,7 @@ class Post_Type extends Item {
 			'post_parent'   => 'post',
 			'post_title'    => 'filter:the_title',
 			'post_parent'   => 'post',
-			'post_author'   => 'user',
-			'post_content'  => 'filter:the_content'
+			'post_author'   => 'user'
 		));
 	}
 
@@ -139,8 +138,8 @@ class Post_Type extends Item {
 		}
 
 		foreach( get_taxonomies() as $taxonomy ) {
-			if( defined( 'rila_post_TYPE_PREFIX' ) ) {
-				$pure = str_replace( rila_post_TYPE_PREFIX, '', $taxonomy );
+			if( defined( 'RILA_POST_TYPE_PREFIX' ) ) {
+				$pure = str_replace( RILA_POST_TYPE_PREFIX, '', $taxonomy );
 			} else {
 				$pure = $taxonomy;
 			}
@@ -262,13 +261,13 @@ class Post_Type extends Item {
 	 *
 	 * @return string
 	 */
-	public function content() {
+	public function post_content() {
 		if( is_singular() && $this->ID == get_queried_object_id() ) {
 			# Make sure the current post is globally set up
 			$GLOBALS[ 'post' ] = $this->item;
 			setup_postdata( $GLOBALS[ 'post' ] );
 
-			return get_the_content();
+			return apply_filters( 'the_content', get_the_content() );
 		} else {
 			return apply_filters( 'the_content', $this->item->post_content );
 		}

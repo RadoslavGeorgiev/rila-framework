@@ -1,23 +1,24 @@
 # Rila Framework for WordPress
-Rila is a framework, focused on front-end WordPress development. It includes a set of lot of lightweight, extendable class wrappers, which let you structure you code properly in a MVC manner.
+Rila is a data-oriented framework for WordPress with rapid front-end development in mind. It includes a set of lot of lightweight and highly extendable class wrappers, which let you structure you code properly in a MVC-like manner.
 
 ## Features
-- Wrapper classes, which allow easy and seamless access to WordPress data within templates.
+- Wrapper classes, which allow for easy and seamless access to WordPress data.
 - Supports pure PHP, Twig and Blade templates out of the box. Other template engines can be easily used.
-- Focuses on performance: Data is available on demand and is never loaded in advance.
-- Integrates seamlessly with plugins for custom fields, has special helpers for Advanced Custom Fields.
+- Focused on performance: Data is available on demand and is never loaded in advance.
+- Integrates seamlessly with plugins for custom fields, has a special helper for Advanced Custom Fields.
 - Built with extensibility in mind: You can finally separate your logic from your views properly.
-- While being ideal as a framework, the plugin can be used as a library too.
 - Well-documented code and thorough documentation
+- Extremely intuitive
+- Smart default context: Everything, related to the current page is already available and waiting for you.
 
 ## Quick example
-Your *single.php* file:
+Your *single.php* (controller) file:
 
 ```php
 rila_view( 'single' )->render();
 ```
 
-Your *single.twig* file:
+Your *single.twig* (view) file:
 ```twig
 {% extends "base.twig" %}
 
@@ -56,7 +57,7 @@ $this->map(array(
 ));
 ```
 
-That code would allow you to use `post.image` instead of `post._thumbnail_id` and the value would be an actual image object, so you can go ahead and simply use this within your templates:
+That code allows you you to use `post.image` instead of `post._thumbnail_id` and the value would be an actual image object, so you can go ahead and simply use this within your templates:
 
 ```twig
 {{ post.image }}
