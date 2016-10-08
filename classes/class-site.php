@@ -45,8 +45,8 @@ class Site extends Item {
 	 * Initializes the needed values.
 	 */
 	protected function __construct() {
-		parent::initialize();
-		
+		$this->initialize();
+
 		$this->item = new \stdClass();
 
 		# Allow the ACF or other extensions to load meta.

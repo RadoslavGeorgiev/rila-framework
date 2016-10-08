@@ -85,7 +85,8 @@ class User extends Item {
 		$this->translate(array(
 			'id'    => 'ID',
 			'name'  => 'display_name',
-			'title' => 'display_name'
+			'title' => 'display_name',
+			'email' => 'user_email'
 		));
 
 		/**

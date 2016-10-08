@@ -95,25 +95,32 @@ class Twig extends Engine {
 
 	/**
 	 * Locates an SVG and includes it.
-	 * 
+	 *
 	 * @since 0.1
 	 *
 	 * @param string $name The name of the SVG
 	 * @return mixed
 	 */
 	public function svg( $name ) {
-		$path = DW_THEME_DIR . 'res/img/icons/' . $name .'.svg';
+		static $path;
 
-		if( file_exists( $path ) ) {
-			echo file_get_contents( $path );
+		if( is_null( $path ) ) {
+			$path = get_bloginfo( 'stylesheet_directory' ) . '/res/img/icons/';
+			$path = apply_filters( 'rila.svg_path', $path );
+		}
+
+		$file = $path . $name .'.svg';
+
+		if( file_exists( $file ) ) {
+			echo file_get_contents( $file );
 		}
 	}
 
 	/**
 	 * Dumps an item.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @param mixed $item THe item that is to be dumpled.
 	 */
 	public function dump( $item ) {
@@ -124,9 +131,9 @@ class Twig extends Engine {
 
 	/**
 	 * Displays WooCommerce's content.
-	 * 
+	 *
 	 * @since 0.1
-	 * 
+	 *
 	 * @return string An empty displayable string.
 	 */
 	public function woo() {

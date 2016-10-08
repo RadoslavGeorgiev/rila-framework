@@ -296,11 +296,12 @@ class Template {
 		}
 
 		$defaults = array(
-			'site'    => Site::instance(),
-			'query'   => new Query( $GLOBALS[ 'wp_query' ] ),
-			'request' => Request::instance(),
-			'theme'   => Theme::instance(),
-			'now'     => new Date
+			'site'        => Site   ::instance(),
+			'query'       => new Query( $GLOBALS[ 'wp_query' ] ),
+			'request'     => Request::instance(),
+			'theme'       => Theme  ::instance(),
+			'now'         => new Date,
+			'breadcrumbs' => new Breadcrumbs
 		);
 
 		# Add the first post to the instance, if any.

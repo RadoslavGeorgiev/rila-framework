@@ -262,7 +262,7 @@ class Collection implements \Iterator, \Countable  {
 			$ok = true;
 
 			foreach( $filters as $key => $value ) {
-				if( $item->$key != $value ) {
+				if( $item->raw( $key ) != $value ) {
 					$ok = false;
 					break;
 				}
@@ -274,7 +274,7 @@ class Collection implements \Iterator, \Countable  {
 		}
 
 		if( empty( $filtered ) ) {
-			return false;
+			return array();
 		}
 
 		$class_name = get_class( $this );
@@ -350,7 +350,7 @@ class Collection implements \Iterator, \Countable  {
 	 */
 	public function count() {
 		$this->check();
-		
+
 		return count( $this->items );
 	}
 
@@ -365,5 +365,22 @@ class Collection implements \Iterator, \Countable  {
 		$this->check();
 
 		return $this->items;
+	}
+
+	/**
+	 * Retrieves an item by ID.
+	 *
+	 * @param int $id The ID of the item.
+	 * @return Item
+	 */
+	public function get( $id ) {
+		$this->check();
+		
+		foreach( $this->items as $item ) {
+			if( $id == $item->ID )
+				return $item;
+		}
+
+		return false;
 	}
 }

@@ -21,7 +21,7 @@ class Comment extends Item {
 	 */
 	function __construct( \WP_Comment $post ) {
 		$this->item = $post;
-		$this->setup_meta( get_comment_meta( $this->item->ID ) );
+		$this->setup_meta( get_comment_meta( $this->item->comment_ID ) );
 
 		# After all the rest is done, use individual initializers
 		$this->initialize();

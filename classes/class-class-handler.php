@@ -29,8 +29,9 @@ class Class_Handler {
 			&& ! is_subclass_of( $class_name, 'Rila\\User' )
 			&& ! is_subclass_of( $class_name, 'Rila\\Comment' )
 			&& ! is_subclass_of( $class_name, 'Rila\\Site' )
+			&& ! is_subclass_of( $class_name, 'Rila\\Custom_Widget' )
 		) {
-			throw new Exception( "Only post types, taxonomies, users, comments and sites can be registered!" );
+			throw new \Exception( "Only post types, taxonomies, users, comments, widgets and sites can be registered!" );
 		}
 
 		$this->name = $class_name;
@@ -41,6 +42,13 @@ class Class_Handler {
 		}
 
 		# Register fields if a method is available.
+		if(
+			method_exists( $class_name, 'register_fields' )
+			&& function_exists( 'uf_load' )
+		) {
+			add_action( 'uf.setup', array( $class_name, 'register_fields' ) );
+		}
+
 		if(
 			method_exists( $class_name, 'register_fields' )
 			&& function_exists( 'acf_add_local_field_group' )
@@ -63,6 +71,9 @@ class Class_Handler {
 
 		else if( is_subclass_of( $class_name, 'Rila\\Site' ) )
 			add_filter( 'rila.site_class', array( $this, 'overwrite_site' ), 9 );
+
+		else if( is_subclass_of( $class_name, 'Rila\\Custom_Widget' ) )
+			add_action( 'widgets_init', array( $this, 'register_widget' ), 9 );
 	}
 
 	/**
@@ -149,5 +160,28 @@ class Class_Handler {
 	 */
 	public function overwrite_site( $class_name ) {
 		return $this->name;
+	}
+
+	/**
+	 * Registers the class as a widget.
+	 *
+	 * @since 0.1
+	 */
+	public function register_widget() {
+		register_widget( $this->name );
+
+		# Check if there is an Ultimate Fields method.
+		if( ! method_exists( $this->name, 'get_fields' ) && ! method_exists( $this->name, 'setup_fields' ) )
+			return;
+
+		$container = \UF_Container_Widget::factory( $this->name, array(), $this->name );
+
+		if( method_exists( $this->name, 'setup_fields' ) ) {
+			call_user_func( array( $this->name, 'setup_fields' ), $container );
+		}
+
+		if( method_exists( $this->name, 'get_fields' ) ) {
+			$container->set_fields_callback( array( $this->name, 'get_fields' ) );
+		}
 	}
 }
