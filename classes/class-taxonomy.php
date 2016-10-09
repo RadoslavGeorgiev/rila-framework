@@ -82,6 +82,7 @@ class Taxonomy extends Item {
 
 		$this->translate(array(
 			'id'    => 'term_id',
+			'ID'    => 'term_id',
 			'title' => 'name'
 		));
 

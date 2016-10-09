@@ -86,7 +86,8 @@ class User extends Item {
 			'id'    => 'ID',
 			'name'  => 'display_name',
 			'title' => 'display_name',
-			'email' => 'user_email'
+			'email' => 'user_email',
+			'login' => 'user_login',
 		));
 
 		/**
