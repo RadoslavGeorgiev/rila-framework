@@ -151,6 +151,8 @@ class Post_Type extends Item {
 			$plural = $pure;
 			if( preg_match( '~y$~i', $plural ) ) {
 				$plural = preg_replace( '~y$~i', 'ies', $plural );
+			} else {
+				$plural .= 's';
 			}
 
 			self::$taxonomies[ 'plural' ][ $plural ] = $taxonomy;
