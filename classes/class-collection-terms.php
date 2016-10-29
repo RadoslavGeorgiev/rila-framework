@@ -77,7 +77,7 @@ class Terms extends Collection {
 			$dummy = new \WP_Term( new \stdClass() );
 		}
 
-		if( property_exists( $dummy, $key ) ) {
+		if( property_exists( $dummy, $key ) || in_array( $key, array( 'hide_empty' ) ) ) {
 			$this->args[ $key ] = $value;
 		} else {
 			$this->meta_query[] = compact( 'key', 'value' );

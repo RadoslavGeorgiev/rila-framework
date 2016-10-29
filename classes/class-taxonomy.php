@@ -2,7 +2,7 @@
 namespace Rila;
 
 use Rila\Item;
-use Rila\Query;
+use Rila\Collection\Posts;
 use Rila\Collection\Terms;
 use Rila\Missing_Object_Exception;
 
@@ -22,7 +22,7 @@ class Taxonomy extends Item {
 	 */
 	function __construct( \WP_Term $term ) {
 		$this->item = $term;
-		$this->setup_meta( get_term_meta( $this->item->ID ) );
+		$this->setup_meta( get_term_meta( $this->item->term_id ) );
 
 		# After all the rest is done, use individual initializers
 		$this->initialize();
@@ -79,9 +79,10 @@ class Taxonomy extends Item {
 	 */
 	protected function initialize() {
 		parent::initialize();
-		
+
 		$this->translate(array(
 			'id'    => 'term_id',
+			'ID'    => 'term_id',
 			'title' => 'name'
 		));
 
@@ -96,15 +97,15 @@ class Taxonomy extends Item {
 	 * @return Templater\Query
 	 */
 	public function posts() {
-		return new Query(array(
-			'post_type' => 'any',
-			'tax_query' => array(
-				array(
-					'taxonomy' => $this->item->taxonomy,
-					'terms'    => $this->item->term_id
-				)
-			)
-		));
+        return new Posts(array(
+            'post_type' => 'any',
+            'tax_query' => array(
+                array(
+                    'taxonomy' => $this->item->taxonomy,
+                    'terms'    => $this->item->term_id
+                )
+            )
+        ));
 	}
 
 	/**
@@ -202,7 +203,7 @@ class Taxonomy extends Item {
 			'rewrite'           => array( 'slug' => $slug ),
 		);
 
-		$args = array_merge_recursive( $basic, $args );
+		$args = array_merge( $basic, $args );
 
 		# Save the arguments
 		self::$registered[ $caller ] = $slug;

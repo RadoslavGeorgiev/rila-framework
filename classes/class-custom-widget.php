@@ -128,7 +128,11 @@ abstract class Custom_Widget extends \WP_Widget {
 
 
 		echo $args[ 'before_widget' ];
-			$this->render( $widget );
+			$r = $this->render( $widget );
+
+			if( $r && is_object( $r ) ) {
+				echo $r;
+			}
 		echo $args[ 'after_widget' ];
 	}
 
@@ -153,6 +157,6 @@ abstract class Custom_Widget extends \WP_Widget {
 	 */
 	public function form( $data ) {
 		// The night is dark and full of terror :o
-		echo '&nbsp;';
+		echo ' ';
 	}
 }

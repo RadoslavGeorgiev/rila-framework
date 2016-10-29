@@ -31,7 +31,9 @@ class Comments extends Collection {
 	 * @since 0.1
 	 */
 	protected function load() {
-		$args = array();
+		$args = array(
+			'order' => 'ASC'
+		);
 
 		if( ! is_null( $this->ids ) ) {
 			$args = array(
@@ -40,7 +42,7 @@ class Comments extends Collection {
 				'orderby'     => 'comment__in'
 			);
 		} elseif( ! is_null( $this->args ) ) {
-			$args = $this->args;
+			$args = array_merge( $args, $this->args );
 		}
 
 		if( isset( $args[ 'meta_query' ] ) ) {

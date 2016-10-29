@@ -86,6 +86,16 @@ trait Query_Args {
     }
 
 	/**
+	 * Sets the order to ascending menu order.
+	 */
+	public function menu_order() {
+		$this->set( 'order', 'ASC' );
+		$this->set( 'orderby', 'menu_order' );
+
+		return $this;
+	}
+
+	/**
 	 * Allows jQuery-style chaining of query parameters.
 	 *
 	 * This function allows a multitude of parameters to be used. By default,
@@ -289,6 +299,8 @@ trait Query_Args {
 
 		if( $parent && is_int( $parent ) ) {
 			$this->set( 'post_parent', $parent );
+		} else {
+			$this->set( 'post_parent', 0 );
 		}
 
 		return $this;

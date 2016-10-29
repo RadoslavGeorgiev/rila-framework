@@ -2,6 +2,7 @@
 namespace Rila;
 
 use Rila\Item;
+use Rila\Collection\Posts;
 use Rila\Collection\Comments;
 use Rila\Missing_Object_Exception;
 use Rila\Taxonomy;
@@ -113,17 +114,20 @@ class Post_Type extends Item {
 			'template'  => '_wp_page_template',
 			'author'    => 'post_author',
 			'user'      => 'post_author',
-			'type'      => 'post_type'
+			'type'      => 'post_type',
+			'modified'  => 'post_modified'
 		));
 
 		$this->map(array(
-			'_thumbnail_id' => 'image',
-			'post_date'     => 'date',
-			'post_date_gmt' => 'date',
-			'post_parent'   => 'post',
-			'post_title'    => 'filter:the_title',
-			'post_parent'   => 'post',
-			'post_author'   => 'user'
+			'_thumbnail_id'     => 'image',
+			'post_date'         => 'date',
+			'post_date_gmt'     => 'date',
+			'post_modified'     => 'date',
+			'post_modified_gmt' => 'date',
+			'post_parent'       => 'post',
+			'post_title'        => 'filter:the_title',
+			'post_parent'       => 'post',
+			'post_author'       => 'user'
 		));
 	}
 
@@ -314,7 +318,7 @@ class Post_Type extends Item {
 	 * @return Comment[]
 	 */
 	public function comments() {
-		return new Comments( 'post_id=' . $this->item->ID );
+		return new Comments( 'status=approve&post_id=' . $this->item->ID );
 	}
 
 	/**
@@ -399,6 +403,11 @@ class Post_Type extends Item {
 			'not_found_in_trash' => "No $plural found in Trash"
 		);
 
+		if( isset( $args[ 'labels' ] ) ) {
+			$labels = array_merge( $labels, $args[ 'labels' ] );
+			unset( $args[ 'labels' ] );
+		}
+
 		$basic = array(
 			'labels'             => $labels,
 			'public'             => true,
@@ -407,12 +416,12 @@ class Post_Type extends Item {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => $slug, 'with_front' => false ),
-			'has_archive'        => true,
+			'has_archive'        => false,
 			'hierarchical'       => false,
 			'supports'           => array( 'title', 'editor', 'thumbnail' )
 		);
 
-		$args = array_merge_recursive( $basic, $args );
+		$args = array_merge( $basic, $args );
 
 		# Save the arguments
 		self::$registered[ $caller ] = $slug;
@@ -525,5 +534,22 @@ class Post_Type extends Item {
 	 */
 	public function password_form() {
 		return get_the_password_form( $this->item );
+	}
+
+	/**
+	 * Returns the children of the current post, ordered by menu order.
+	 *
+	 * @since 0.11
+	 *
+	 * @return Rila\Collection\Posts
+	 */
+	public function children() {
+		return new Posts(array(
+			'post_type'      => $this->item->post_type,
+			'posts_per_page' => -1,
+			'post_parent'    => $this->item->ID,
+			'order'          => 'ASC',
+			'orderby'        => 'menu_order'
+		));
 	}
 }
