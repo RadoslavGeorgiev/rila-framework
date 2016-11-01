@@ -238,6 +238,78 @@ function rila_register_class( $classname ) {
 }
 
 /**
+ * Creates a new collection of posts.
+ *
+ * @since 0.11
+ *
+ * @param mixed $args Either an array or string of arguments for the collection. (optional)
+ * @return Rila\Collection\Posts
+ */
+function rila_posts( $args = '' ) {
+	return new Rila\Collection\Posts( $args );
+}
+
+/**
+ * Creates a new collection of terms.
+ *
+ * @since 0.11
+ *
+ * @param mixed $args Either an array or string of arguments for the collection. (optional)
+ * @return Rila\Collection\Terms
+ */
+function rila_terms( $args = '' ) {
+	return new Rila\Collection\Terms( $args );
+}
+
+/**
+ * Creates a new collection of users.
+ *
+ * @since 0.11
+ *
+ * @param mixed $args Either an array or string of arguments for the collection. (optional)
+ * @return Rila\Collection\Users
+ */
+function rila_users( $args = '' ) {
+	return new Rila\Collection\Users( $args );
+}
+
+/**
+ * Creates a new collection of comments.
+ *
+ * @since 0.11
+ *
+ * @param mixed $args Either an array or string of arguments for the collection. (optional)
+ * @return Rila\Collection\Comments
+ */
+function rila_comments( $args = '' ) {
+	return new Rila\Collection\Comments( $args );
+}
+
+/**
+ * Creates a new collection of files.
+ *
+ * @since 0.11
+ *
+ * @param mixed $args Either an array or string of arguments for the collection. (optional)
+ * @return Rila\Collection\Files
+ */
+function rila_files( $args = '' ) {
+	return new Rila\Collection\Files( $args );
+}
+
+/**
+ * Creates a new collection of images.
+ *
+ * @since 0.11
+ *
+ * @param mixed $args Either an array or string of arguments for the collection. (optional)
+ * @return Rila\Collection\Images
+ */
+function rila_images( $args = '' ) {
+	return new Rila\Collection\Images( $args );
+}
+
+/**
  * Converts a linear array with dot notations to a nested one.
  *
  * @since 0.1
