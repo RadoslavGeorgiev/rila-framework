@@ -4,7 +4,7 @@ namespace Rila;
 /**
  * Handles collections of the "Item" class.
  */
-class Collection implements \Iterator, \Countable  {
+class Collection implements \Iterator, \Countable, \ArrayAccess {
 	/**
 	 * Holds the item type, which can be handled by the class.
 	 *
@@ -205,6 +205,80 @@ class Collection implements \Iterator, \Countable  {
 	}
 
 	/**
+	 * Checks if a certain offset exists.
+	 *
+	 * @since 0.11
+	 *
+	 * @param int $offset The offset to check.
+	 * @return bool
+	 */
+	public function offsetExists( $offset ) {
+		$this->check();
+
+		return isset( $this->items[ $offset ] );
+	}
+
+	/**
+	 * Returns the item at a certain offset.
+	 *
+	 * @since 0.11
+	 *
+	 * @param int $offset The offset to retrieve an item from.
+	 * @return mixed
+	 */
+	public function offsetGet( $offset ) {
+		$this->check();
+
+		return $this->items[ $offset ];
+	}
+
+	/**
+	 * Attempts adding an item to the object.
+	 *
+	 * @since 0.11
+	 *
+	 * @param mixed $offset Either null to append or an integer.
+	 * @param Item  $value  The value to set.
+	 */
+	public function offsetSet( $offset, $value ) {
+		if( ! is_a( $value, $this->item_type ) ) {
+			# Attempt creating the appropriate item
+			try {
+				$value = call_user_func( array( $this->item_type, 'factory' ), $value );
+			} catch( Missing_Object_Exception $a ) {
+				$message = sprintf(
+					"%s only supports %s items.",
+					get_class( $this ),
+					$this->item_type
+				);
+
+				throw new \Exception( $message );
+			}
+		}
+
+		if( is_null( $offset ) ) {
+			$this->items[] = $value;
+		} else {
+			if( ! is_int( $offset ) ) {
+				throw new \Exception( 'Collections only support numeric keys.' );
+			}
+
+			$this->items[ $offset ] = $value;
+		}
+	}
+
+	/**
+	 * Unsets an offset from the internal array.
+	 *
+	 * @since 0.11
+	 *
+	 * @param string $offset The offset to unset.
+	 */
+	public function offsetUnset( $offset ) {
+		unset( $this->items[ $offset ] );
+	}
+
+	/**
 	 * Allows additional conditions to be used for wheres.
 	 *
 	 * @since 0.1
@@ -338,7 +412,11 @@ class Collection implements \Iterator, \Countable  {
 	 * @return Item The item at that index.
 	 */
 	public function at( $index ) {
-		return $this->items[ $index ];
+		$this->check();
+
+		return isset( $this->items[ $index ] )
+			? $this->items[ $index ]
+			: false;
 	}
 
 	/**
@@ -375,12 +453,40 @@ class Collection implements \Iterator, \Countable  {
 	 */
 	public function get( $id ) {
 		$this->check();
-		
+
 		foreach( $this->items as $item ) {
 			if( $id == $item->ID )
 				return $item;
 		}
 
 		return false;
+	}
+
+	/**
+	 * Returns the first element of the collection, if any.
+	 *
+	 * @since 0.11
+	 *
+	 * @return mixed Either the first element or null.
+	 */
+	public function first() {
+		return $this->at( 0 );
+	}
+
+	/**
+	 * Returns the last element of the collection, if any.
+	 *
+	 * @since 0.1
+	 *
+	 * @return mixed Either the last element or false.
+	 */
+	public function last() {
+		$this->check();
+
+		if( empty( $this->items ) ) {
+			return false;
+		}
+
+		return $this->items[ count( $this->items ) - 1 ];
 	}
 }
