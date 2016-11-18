@@ -54,7 +54,8 @@ class Twig extends Engine {
 			'sanitize' => 'sanitize_title',
 			'p'        => 'wpautop',
 			'ucwords'  => 'ucwords',
-			'dump'     => array( $this, 'dump' )
+			'dump'     => array( $this, 'dump' ),
+			'br'       => 'nl2br'
 		);
 
 		foreach( $filters as $filter => $func ) {
@@ -105,7 +106,7 @@ class Twig extends Engine {
 		static $path;
 
 		if( is_null( $path ) ) {
-			$path = get_bloginfo( 'stylesheet_directory' ) . '/res/img/icons/';
+			$path = get_stylesheet_directory() . '/res/img/icons/';
 			$path = apply_filters( 'rila.svg_path', $path );
 		}
 

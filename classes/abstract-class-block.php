@@ -1,6 +1,8 @@
 <?php
 namespace Rila;
 
+use Rila\Meta;
+
 /**
  * Adds the support for basic content blocks.
  *
@@ -176,8 +178,16 @@ abstract class Block implements \ArrayAccess {
      * @return mixed
      */
     public function offsetGet( $offset ) {
-        return isset( $this->data[ $offset ] )
-        	? $this->data[ $offset ]
-        	: null;
+    	if( ! isset( $this->data[ $offset ] ) ) {
+    		return null;
+    	}
+
+		$value = $this->data[ $offset ];
+		if( method_exists( $this, 'map' ) ) {
+			$map   = rila_dot_to_array( $this->map() );
+			return Meta::map( $value, $offset, $map );			
+		} else {
+			return $value;
+		}
     }
 }

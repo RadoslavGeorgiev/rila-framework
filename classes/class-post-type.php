@@ -115,7 +115,8 @@ class Post_Type extends Item {
 			'author'    => 'post_author',
 			'user'      => 'post_author',
 			'type'      => 'post_type',
-			'modified'  => 'post_modified'
+			'modified'  => 'post_modified',
+			'mime_type' => 'post_mime_type'
 		));
 
 		$this->map(array(

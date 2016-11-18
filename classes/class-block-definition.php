@@ -15,7 +15,7 @@ class Block_Definition {
 		'fields'  => array(),
 		'display' => 'block',
 		'min'     => 0,
-		'max'     => 0,
+		'max'     => 0
 	);
 
 	/**

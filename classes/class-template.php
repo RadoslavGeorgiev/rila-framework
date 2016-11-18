@@ -236,7 +236,7 @@ class Template {
 		}
 
 		if( false == $found ) {
-			throw new Missing_Template_Exception( "No template found!" );
+			throw new Missing_Template_Exception( "No template found (" . implode( ', ', (array) $this->name ) . ")!" );
 		}
 
 		# Create some aliases

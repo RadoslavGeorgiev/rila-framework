@@ -26,6 +26,8 @@ class Image extends File {
 	 * @since 0.1
 	 */
 	protected function initialize() {
+		parent::initialize();
+		
 		$this->initialize_taxonomies();
 
 		$this->translate(array(
@@ -67,9 +69,10 @@ class Image extends File {
 	 * @return mixed
 	 */
 	public function get( $property ) {
-		if( in_array( $property, self::get_image_sizes() ) ) {
+		$sizes = self::get_image_sizes();
+		if( isset( $sizes[ $property ] ) ) {
 			$image = clone $this;
-			$image->size = $property;
+			$image->size = $sizes[ $property ];
 			return $image;
 		}
 
@@ -105,8 +108,14 @@ class Image extends File {
 	 * @return string
 	 */
 	public static function get_image_sizes() {
-		$sizes   = get_intermediate_image_sizes();
-		$sizes[] = 'full';
+		$sizes = array();
+		$raw   = get_intermediate_image_sizes();
+
+		foreach( $raw as $size ) {
+			$sizes[ str_replace( '-', '_', $size ) ] = $size;
+		}
+
+		$sizes[ 'full' ] = 'full';
 
 		return $sizes;
 	}
@@ -119,8 +128,8 @@ class Image extends File {
 	public static function add_twig_filters( $enviroment ) {
 		$sizes = self::get_image_sizes();
 
-		foreach( $sizes as $size ) {
-			$filter = new \Twig_SimpleFilter( $size, function($image) use( $size ) {
+		foreach( $sizes as $key => $size ) {
+			$filter = new \Twig_SimpleFilter( $key, function($image) use( $size ) {
 				$image->size = $size;
 				return $image;
 			}, array( 'is_safe' => array( 'html' ) ) );

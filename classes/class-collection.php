@@ -433,19 +433,6 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	}
 
 	/**
-	 * Returns an array of simple properties for var_dump() or print_r().
-	 *
-	 * @since 0.1
-	 *
-	 * @return mixed[]
-	 */
-	public function __debugInfo() {
-		$this->check();
-
-		return $this->items;
-	}
-
-	/**
 	 * Retrieves an item by ID.
 	 *
 	 * @param int $id The ID of the item.
