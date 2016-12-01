@@ -6,7 +6,7 @@ namespace Rila;
  *
  * @since 0.1
  */
-class Meta implements \Iterator {
+class Meta implements \Iterator, \Countable {
 	/**
 	 * Holds the data we're working with.
 	 *
@@ -253,5 +253,16 @@ class Meta implements \Iterator {
 		}
 
 		return $value;
+    }
+
+    /**
+     * Returns the count of the internal values.
+     *
+     * @since 0.12
+     * 
+     * @return int
+     */
+    public function count() {
+    	return count( $this->data );
     }
 }
