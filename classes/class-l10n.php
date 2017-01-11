@@ -58,17 +58,17 @@ class L10N {
 	 * @param Twig_Environment $env The environment to modify.
 	 */
 	public function setup_environment( $environment ) {
-		$environment->addFunction( '__', new \Twig_Function_Function( array( $this, '__' ) ) );
-		$environment->addFunction( '_e', new \Twig_Function_Function( array( $this, '_e' ) ) );
-		$environment->addFunction( 'esc_attr_e', new \Twig_Function_Function( array( $this, 'esc_attr_e' ) ) );
-		$environment->addFunction( 'esc_html_e', new \Twig_Function_Function( array( $this, 'esc_html_e' ) ) );
+		$environment->addFunction( new \Twig_SimpleFunction( '__', array( $this, '__' ) ) );
+		$environment->addFunction( new \Twig_SimpleFunction( '_e', array( $this, '_e' ) ) );
+		$environment->addFunction( new \Twig_SimpleFunction( 'esc_attr_e', array( $this, 'esc_attr_e' ) ) );
+		$environment->addFunction( new \Twig_SimpleFunction( 'esc_html_e', ( $this, 'esc_html_e' ) ) );
 
-		$environment->addFunction( '_x', new \Twig_Function_Function( array( $this, '_x' ) ) );
-		$environment->addFunction( '_ex', new \Twig_Function_Function( array( $this, '_ex' ) ) );
-		$environment->addFunction( 'esc_attr_x', new \Twig_Function_Function( array( $this, 'esc_attr_x' ) ) );
-		$environment->addFunction( 'esc_html_x', new \Twig_Function_Function( array( $this, 'esc_html_x' ) ) );
+		$environment->addFunction( new \Twig_SimpleFunction( '_x', array( $this, '_x' ) ) );
+		$environment->addFunction( new \Twig_SimpleFunction( '_ex', array( $this, '_ex' ) ) );
+		$environment->addFunction( new \Twig_SimpleFunction( 'esc_attr_x', array( $this, 'esc_attr_x' ) ) );
+		$environment->addFunction( new \Twig_SimpleFunction( 'esc_html_x', array( $this, 'esc_html_x' ) ) );
 
-		$environment->addFunction( '_n', new \Twig_Function_Function( array( $this, '_n' ) ) );
+		$environment->addFunction( new \Twig_SimpleFunction( '_n', array( $this, '_n' ) ) );
 	}
 
 	public function __( $text, $domain = '' ) {
