@@ -36,14 +36,13 @@ class Twig extends Engine {
 			'language_attributes' => 'language_attributes',
 			'body_class'          => 'body_class',
 			'sidebar'             => array( $this, 'sidebar' ),
+			'svg'                 => array( $this, 'svg' ),
 			'woocommerce'         => array( $this, 'woo' )
 		);
 
 		foreach( $default_functions as $shortcut => $function ) {
-			$this->environment->addFunction( $shortcut, new \Twig_Function_Function( $function ) );
+			$this->environment->addFunction( new \Twig_SimpleFunction( $shortcut, $function ) );
 		}
-
-		$this->environment->addFunction( 'svg', new \Twig_Function_Function( array( $this, 'svg' ) ) );
 
 		# Add filters
 		$filters = array(
