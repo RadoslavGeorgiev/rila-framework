@@ -51,6 +51,12 @@ class Post_Type extends Item {
 			return $post;
 		}
 
+		# Allow to pass an array to get the first hit in a get_post query
+		if( is_array( $post ) ) {
+			$posts = get_posts( $post );
+			if( ! empty( $posts ) ) $post = $posts[0];
+		}
+
 		if( is_null( $post ) || ( ! is_object( $post ) && intval( $post ) ) ) {
 			$post = get_post( $post );
 		}
