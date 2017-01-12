@@ -61,7 +61,7 @@ class L10N {
 		$environment->addFunction( new \Twig_SimpleFunction( '__', array( $this, '__' ) ) );
 		$environment->addFunction( new \Twig_SimpleFunction( '_e', array( $this, '_e' ) ) );
 		$environment->addFunction( new \Twig_SimpleFunction( 'esc_attr_e', array( $this, 'esc_attr_e' ) ) );
-		$environment->addFunction( new \Twig_SimpleFunction( 'esc_html_e', ( $this, 'esc_html_e' ) ) );
+		$environment->addFunction( new \Twig_SimpleFunction( 'esc_html_e', array( $this, 'esc_html_e' ) ) );
 
 		$environment->addFunction( new \Twig_SimpleFunction( '_x', array( $this, '_x' ) ) );
 		$environment->addFunction( new \Twig_SimpleFunction( '_ex', array( $this, '_ex' ) ) );
