@@ -248,7 +248,7 @@ class Taxonomy extends Item {
 	 *
 	 * @return Taxonomy[]
 	 */
-	public static function all() {
-		return new Terms( array( 'taxonomy' => 'event-category' ) );
+	public static function all( $taxonomy = 'category') {
+		return new Terms( array( 'taxonomy' => $taxonomy ) );
 	}
 }
