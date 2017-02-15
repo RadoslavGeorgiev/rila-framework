@@ -363,6 +363,8 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	 * @param callbable $comparator A custom comparator.
 	 */
 	public function sort( $comparator = null ) {
+		$this->check();
+
 		usort( $this->items, $comparator ? $comparator : array( $this, 'compare' ) );
 
 		return $this;
