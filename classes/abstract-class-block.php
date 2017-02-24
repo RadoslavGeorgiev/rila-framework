@@ -185,7 +185,7 @@ abstract class Block implements \ArrayAccess {
 		$value = $this->data[ $offset ];
 		if( method_exists( $this, 'map' ) ) {
 			$map   = rila_dot_to_array( $this->map() );
-			return Meta::map( $value, $offset, $map );			
+			return Meta::map( $value, $offset, $map );
 		} else {
 			return $value;
 		}
