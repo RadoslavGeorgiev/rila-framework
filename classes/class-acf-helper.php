@@ -269,7 +269,15 @@ class ACF_Helper {
 			}
 		}
 		# Inject the repeater values into place
-		foreach( $repeater_data as $key => $value ) {
+		foreach( $repeater_data as $key => $repeater_value ) {
+			$value = array();
+
+			foreach( $repeater_value as $row ) {
+				$row = $this->maybe_parse_repeaters( $row );
+				$row = $this->maybe_parse_flexible_content( $row );
+				$value[] = $row;
+			}
+
 			$meta[ $key ] = $value;
 		}
 
