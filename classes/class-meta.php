@@ -178,6 +178,11 @@ class Meta implements \Iterator, \Countable {
 			return new Meta( $value, $map[ $property ] );
 		}
 
+		# If the map is an array, check if it's an immediate callback
+		if( is_array( $map[ $property ] ) && is_callable( $map[ $property ] ) ) {
+			$map[ $property ] = array( $map[ $property ] );
+		}
+
 		# Treat maps as arrays
 		foreach( (array) $map[ $property ] as $map_to ) {
 			$is_array = is_string( $map_to ) && preg_match( '~\[\]$~', $map_to );
@@ -186,16 +191,29 @@ class Meta implements \Iterator, \Countable {
 				$map_to = str_replace( '[]', '', $map_to );
 			}
 
-	    	if( is_array( $map_to ) && is_array( $value ) ) {
+			# Wrap callbacks into an extra level to allow looping
+	    	if( is_array( $map_to ) && ! is_callable( $map_to ) && is_array( $value ) ) {
 				$value = new Meta( $value, $map_to );
 				continue;
 			}
 
-			if( isset( $shortcuts[ $map_to ] ) ) {
-				$map_to = $shortcuts[ $map_to ];
-			}
-
 			try {
+				# Check for a direct callback
+				if( is_array( $map_to ) && is_callable( $map_to ) ) {
+					if( $is_array ) {
+						$value = array_map( $map_to, $value );
+					} else {
+						$value = call_user_func( $map_to, $value );
+					}
+
+					continue;
+				}
+
+				# Use shortcuts
+				if( isset( $shortcuts[ $map_to ] ) ) {
+					$map_to = $shortcuts[ $map_to ];
+				}
+
 				# Try a simple class name
 				if( class_exists( $map_to ) ) {
 					if( $is_array ) {
@@ -259,7 +277,7 @@ class Meta implements \Iterator, \Countable {
      * Returns the count of the internal values.
      *
      * @since 0.12
-     * 
+     *
      * @return int
      */
     public function count() {
