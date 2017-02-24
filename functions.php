@@ -240,7 +240,7 @@ function rila_register_class( $classname ) {
 /**
  * Creates a new collection of posts.
  *
- * @since 0.2
+ * @since 0.11
  *
  * @param mixed $args Either an array or string of arguments for the collection. (optional)
  * @return Rila\Collection\Posts
@@ -252,7 +252,7 @@ function rila_posts( $args = '' ) {
 /**
  * Creates a new collection of terms.
  *
- * @since 0.2
+ * @since 0.11
  *
  * @param mixed $args Either an array or string of arguments for the collection. (optional)
  * @return Rila\Collection\Terms
@@ -264,7 +264,7 @@ function rila_terms( $args = '' ) {
 /**
  * Creates a new collection of users.
  *
- * @since 0.2
+ * @since 0.11
  *
  * @param mixed $args Either an array or string of arguments for the collection. (optional)
  * @return Rila\Collection\Users
@@ -276,7 +276,7 @@ function rila_users( $args = '' ) {
 /**
  * Creates a new collection of comments.
  *
- * @since 0.2
+ * @since 0.11
  *
  * @param mixed $args Either an array or string of arguments for the collection. (optional)
  * @return Rila\Collection\Comments
@@ -288,7 +288,7 @@ function rila_comments( $args = '' ) {
 /**
  * Creates a new collection of files.
  *
- * @since 0.2
+ * @since 0.11
  *
  * @param mixed $args Either an array or string of arguments for the collection. (optional)
  * @return Rila\Collection\Files
@@ -300,7 +300,7 @@ function rila_files( $args = '' ) {
 /**
  * Creates a new collection of images.
  *
- * @since 0.2
+ * @since 0.11
  *
  * @param mixed $args Either an array or string of arguments for the collection. (optional)
  * @return Rila\Collection\Images

@@ -276,7 +276,7 @@ class Meta implements \Iterator, \Countable {
     /**
      * Returns the count of the internal values.
      *
-     * @since 0.2
+     * @since 0.11
      *
      * @return int
      */

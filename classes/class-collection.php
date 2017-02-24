@@ -207,7 +207,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	/**
 	 * Checks if a certain offset exists.
 	 *
-	 * @since 0.2
+	 * @since 0.11
 	 *
 	 * @param int $offset The offset to check.
 	 * @return bool
@@ -221,7 +221,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	/**
 	 * Returns the item at a certain offset.
 	 *
-	 * @since 0.2
+	 * @since 0.11
 	 *
 	 * @param int $offset The offset to retrieve an item from.
 	 * @return mixed
@@ -235,7 +235,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	/**
 	 * Attempts adding an item to the object.
 	 *
-	 * @since 0.2
+	 * @since 0.11
 	 *
 	 * @param mixed $offset Either null to append or an integer.
 	 * @param Item  $value  The value to set.
@@ -270,7 +270,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	/**
 	 * Unsets an offset from the internal array.
 	 *
-	 * @since 0.2
+	 * @since 0.11
 	 *
 	 * @param string $offset The offset to unset.
 	 */
@@ -454,7 +454,7 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 	/**
 	 * Returns the first element of the collection, if any.
 	 *
-	 * @since 0.2
+	 * @since 0.11
 	 *
 	 * @return mixed Either the first element or null.
 	 */

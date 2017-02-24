@@ -194,7 +194,7 @@ class Image extends File {
 	 * This is needed because by default, the thumbnail property is pointing to the
 	 * featured image of posts, which for an image is simply null.
 	 *
-	 * @since 0.2
+	 * @since 0.11
 	 *
 	 * @return Rila\Image
 	 */
