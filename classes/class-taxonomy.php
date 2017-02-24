@@ -250,6 +250,21 @@ class Taxonomy extends Item {
 	 * @return Taxonomy[]
 	 */
 	public static function all() {
-		return new Terms( array( 'taxonomy' => 'event-category' ) );
+		$args = array();
+
+		$current_class = get_called_class();
+		if( isset( self::$registered[ $current_class ] ) ) {
+			$args[ 'taxonomy' ] = self::$registered[ $current_class ];
+		} else {
+			# Check for a taxonomy, which works with the class-name
+			$taxonomy_name = strtolower( basename( $current_class ) );
+			if( 'tag' == $taxonomy_name  ) $taxonomy_name = 'post_tag';
+
+			if( taxonomy_exists( $taxonomy_name ) ) {
+				$args[ 'taxonomy' ] = $taxonomy_name;
+			}
+		}
+
+		return new Terms( $args );
 	}
 }
