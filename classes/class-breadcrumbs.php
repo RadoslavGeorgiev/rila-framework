@@ -4,13 +4,13 @@ namespace Rila;
 /**
  * Handles normal breadcrumbs based on the current item.
  *
- * @since 0.11
+ * @since 0.2
  */
 class Breadcrumbs {
 	/**
 	 * Holds all current items.
 	 *
-	 * @since 0.11
+	 * @since 0.2
 	 * @var Rila\Item
 	 */
 	protected $item;
@@ -18,7 +18,7 @@ class Breadcrumbs {
 	/**
 	 * Saves the current item if one is available.
 	 *
-	 * @since 0.11
+	 * @since 0.2
 	 *
 	 * @param Rila\Item $item The item that should be used as the current one.
 	 */
@@ -31,7 +31,7 @@ class Breadcrumbs {
 	/**
 	 * Locates the main item for the breadcrumbs.
 	 *
-	 * @since 0.11
+	 * @since 0.2
 	 *
 	 * @return Rila\Item
 	 */
@@ -50,7 +50,7 @@ class Breadcrumbs {
 		/**
 		 * Allows the current item for breadcrumbs to be overwritten.
 		 *
-		 * @since 0.11
+		 * @since 0.2
 		 *
 		 * @param mixed $item The item that will be used for the breadcrumbs.
 		 */
@@ -62,7 +62,7 @@ class Breadcrumbs {
 	/**
 	 * Renders the breadcrumbs.
 	 *
-	 * @since 0.11
+	 * @since 0.2
 	 *
 	 * @return string
 	 */
@@ -108,7 +108,7 @@ class Breadcrumbs {
 	/**
 	 * Retrieves the breadcrumbs for a certain item.
 	 *
-	 * @since 0.11
+	 * @since 0.2
 	 *
 	 * @param mixed $item The item to crawl.
 	 * @return mixed[]
@@ -140,7 +140,7 @@ class Breadcrumbs {
 	/**
 	 * Generates the string reprensentation of all breadcrumbs.
 	 *
-	 * @since 0.11
+	 * @since 0.2
 	 *
 	 * @return string
 	 */

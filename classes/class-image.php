@@ -27,17 +27,18 @@ class Image extends File {
 	 */
 	protected function initialize() {
 		parent::initialize();
-		
+
 		$this->initialize_taxonomies();
 
 		$this->translate(array(
-			'id'      => 'ID',
-			'title'   => 'post_title',
-			'content' => 'post_content',
-			'date'    => 'post_date',
-			'post'    => 'post_parent',
-			'author'  => 'post_author',
-			'user'    => 'post_author'
+			'id'        => 'ID',
+			'title'     => 'post_title',
+			'content'   => 'post_content',
+			'date'      => 'post_date',
+			'post'      => 'post_parent',
+			'author'    => 'post_author',
+			'user'      => 'post_author',
+			'thumbnail' => 'thumbnail_size'
 		));
 
 		$this->map(array(
@@ -185,5 +186,21 @@ class Image extends File {
 		$this->attr_cache[ $this->size ] = $attr;
 
 		return $attr;
+	}
+
+	/**
+	 * Changes the size of the image to "thumbnail".
+	 *
+	 * This is needed because by default, the thumbnail property is pointing to the
+	 * featured image of posts, which for an image is simply null.
+	 *
+	 * @since 0.2
+	 *
+	 * @return Rila\Image
+	 */
+	public function thumbnail_size() {
+		$this->size = 'thumbnail';
+
+		return $this;
 	}
 }

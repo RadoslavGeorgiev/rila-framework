@@ -540,7 +540,7 @@ class Post_Type extends Item {
 	/**
 	 * Returns the children of the current post, ordered by menu order.
 	 *
-	 * @since 0.11
+	 * @since 0.2
 	 *
 	 * @return Rila\Collection\Posts
 	 */
