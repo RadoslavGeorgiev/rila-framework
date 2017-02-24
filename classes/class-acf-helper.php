@@ -8,6 +8,14 @@ namespace Rila;
  */
 class ACF_Helper {
 	/**
+	 * Holds all cached options.
+	 *
+	 * @since 3.0
+	 * @var mixed[]
+	 */
+	protected $options = array();
+
+	/**
 	 * Creates a singular instance of the class.
 	 *
 	 * @since 0.1
@@ -339,6 +347,10 @@ class ACF_Helper {
 	public function handle_terms( $processed, $source, $term ) {
 		if( ! is_a( $term, 'Rila\\Taxonomy' ) )
 			return $processed;
+
+		if( ! $this->options ) {
+			$this->handle_site( array(), array(), rila_site() );
+		}
 
 		$prefix = $term->item->taxonomy . '_' . $term->item->term_id . '_';
 		$meta   = array();
