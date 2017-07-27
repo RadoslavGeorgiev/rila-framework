@@ -96,7 +96,7 @@ class Breadcrumbs {
 			if( is_object( $link ) && method_exists( $link, 'breadcrumb' ) ) {
 				$is_root = ( 0 === $i ) && ( 1 != count( $links ) );
 
-				$strings[] = $link->breadcrumb( $is_root );
+				$strings[] = $link->breadcrumb( $is_root, $i + 1 );
 			} else {
 				$strings[] = (string) $link;
 			}
@@ -150,5 +150,20 @@ class Breadcrumbs {
 		} catch( \Exception $e ) {
 			return $e->getMessage();
 		}
+	}
+
+	/**
+	 * Displays a 404 string.
+	 *
+	 * @since 3.0
+	 */
+	public function not_found() {
+		return method_exists( rila_site(), 'not_found' )
+			? rila_site()->not_found()
+			:  sprintf(
+				'<a href="%s">%s</a>',
+				rila_site()->url,
+				'404'
+			);
 	}
 }

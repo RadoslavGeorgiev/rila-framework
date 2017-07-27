@@ -51,6 +51,16 @@ class Post_Type extends Item {
 			return $post;
 		}
 
+		/**
+		 * Allows external filters to modify the object that is being seeked.
+		 *
+		 * @since 3.0
+		 *
+		 * @param mixed $post The post that is to be initialized.
+		 * @return mixed
+		 */
+		$post = apply_filters( 'rila.post.pre_parse', $post );
+
 		if( is_null( $post ) || ( ! is_object( $post ) && intval( $post ) ) ) {
 			$post = get_post( $post );
 		}
@@ -116,7 +126,8 @@ class Post_Type extends Item {
 			'user'      => 'post_author',
 			'type'      => 'post_type',
 			'modified'  => 'post_modified',
-			'mime_type' => 'post_mime_type'
+			'mime_type' => 'post_mime_type',
+			'slug'      => 'post_name'
 		));
 
 		$this->map(array(
@@ -376,7 +387,7 @@ class Post_Type extends Item {
 		}
 
 		if( isset( $args[ 'plural' ] ) ) {
-			$singular = $args[ 'plural' ];
+			$plural = $args[ 'plural' ];
 		}
 
 		if( isset( $args[ 'slug' ] ) ) {

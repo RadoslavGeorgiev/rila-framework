@@ -1,6 +1,8 @@
 <?php
 namespace Rila;
 
+use UF3\Container;
+
 /**
  * Handles the registration and rewrite of basic classes.
  *
@@ -44,9 +46,9 @@ class Class_Handler {
 		# Register fields if a method is available.
 		if(
 			method_exists( $class_name, 'register_fields' )
-			&& function_exists( 'uf_load' )
+			&& function_exists( 'ultimate_fields' )
 		) {
-			add_action( 'uf.setup', array( $class_name, 'register_fields' ) );
+			add_action( 'uf.init', array( $class_name, 'register_fields' ) );
 		}
 
 		if(
@@ -174,7 +176,8 @@ class Class_Handler {
 		if( ! method_exists( $this->name, 'get_fields' ) && ! method_exists( $this->name, 'setup_fields' ) )
 			return;
 
-		$container = \UF_Container_Widget::factory( $this->name, array(), $this->name );
+		$container = Container::create( $this->name )
+			->add_location( 'widget', $this->name );
 
 		if( method_exists( $this->name, 'setup_fields' ) ) {
 			call_user_func( array( $this->name, 'setup_fields' ), $container );
