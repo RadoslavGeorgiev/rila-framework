@@ -20,6 +20,22 @@ class Builder implements \Iterator, \Countable {
 	}
 
 	/**
+	 * Sets up a repeater for Ultimate Fields.
+	 *
+	 * @since 0.3
+	 *
+	 * @param UF3\Field\Repeater $field  A repeater field to setup.
+	 * @param string[]           $blocks The blocks to use.
+	 */
+	public static function setup_repeater( $field, $blocks ) {
+		foreach( $blocks as $block ) {
+			$field->add_group( call_user_func( array( Block::class, 'get_group' ), $block ) );
+		}
+
+		return $field;
+	}
+
+	/**
 	 * Holds raw data, which contains block, but is used only
 	 * for the initialisation of the block.
 	 *

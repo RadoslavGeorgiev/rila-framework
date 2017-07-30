@@ -59,6 +59,31 @@ abstract class Block implements \ArrayAccess {
 	}
 
 	/**
+	 * Creates a new repeater group, usable within an Ultimate Fields repeater field.
+	 *
+	 * @since 0.3
+	 *
+	 * @param string $class_name The class of the block.
+	 * @return UF3\Container\Repeater_Group;
+	 */
+	public static function get_group( $class_name ) {
+		$group = new \UF3\Container\Repeater_Group( str_replace( '\\', '_ns_', $class_name ) );
+
+		$queue = array( $class_name );
+		$parent = $class_name;
+		while( ( $parent = get_parent_class( $parent ) ) && 'Rila\\Block' != $parent ) {
+			$queue[] = $parent;
+		}
+
+		# Reverse the queue and setup
+		foreach( array_reverse( $queue ) as $cn ) {
+			$cn::setup( $group );
+		}
+
+		return $group;
+	}
+
+	/**
 	 * Initializes a new block by receiving it's data.
 	 *
 	 * @since 0.1
