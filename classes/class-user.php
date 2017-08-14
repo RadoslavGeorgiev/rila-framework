@@ -190,4 +190,18 @@ class User extends Item {
 		return self::_add_fields( $id, $title, $location, $fields );
 	}
 
+	/**
+	 * Returns the role of the user.
+	 *
+	 * @since 0.3
+	 *
+	 * @return string
+	 */
+	public function role() {
+		foreach( $this->user->roles as $role ) {
+			return $role;
+		}
+
+		return false;
+	}
 }
