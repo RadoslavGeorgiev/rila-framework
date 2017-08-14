@@ -556,12 +556,34 @@ class Post_Type extends Item {
 	 * @return Rila\Collection\Posts
 	 */
 	public function children() {
-		return new Posts(array(
+		$args = array(
 			'post_type'      => $this->item->post_type,
 			'posts_per_page' => -1,
-			'post_parent'    => $this->item->ID,
-			'order'          => 'ASC',
-			'orderby'        => 'menu_order'
-		));
+			'post_parent'    => $this->item->ID
+		);
+
+		// Switch to hierarchical post type if needed
+		if( is_post_type_hierarchical( $this->item->post_type ) ) {
+			$args[ 'order' ] = 'ASC';
+			$args[ 'orderby' ] = 'menu_order';
+		}
+
+		return new Posts( $args );
+	}
+
+	/**
+	 * Checks if the post is currently being displayed.
+	 *
+	 * @since 0.3
+	 *
+	 * @return bool
+	 */
+	public function is_active() {
+		switch( $this->item->post_type ) {
+			case 'page':
+				return is_page( $this->item->ID );
+			default:
+				return is_single( $this->item->ID );
+		}
 	}
 }
