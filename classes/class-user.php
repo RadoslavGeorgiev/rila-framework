@@ -204,4 +204,15 @@ class User extends Item {
 
 		return false;
 	}
+
+	/**
+	 * Handles the user avatar.
+	 *
+	 * @since 0.3
+	 *
+	 * @return string
+	 */
+	public function avatar() {
+		return get_avatar( $this->user->ID );
+	}
 }
