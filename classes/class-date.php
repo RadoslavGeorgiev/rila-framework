@@ -99,6 +99,26 @@ class Date {
 		}, array( 'is_safe' => array( 'html' ) ) );
 		$enviroment->addFilter( $filter );
 	}
+
+	/**
+	 * Returns a himan-readable time diff between the date and now or another date.
+	 *
+	 * @since 0.3
+	 *
+	 * @param mixed $compare_to The date to compare to (optional).
+	 * @return string
+	 */
+	public function diff( $compare_to = null ) {
+		if( ! is_null( $compare_to ) ) {
+			if( is_a( $compare_to, self::class ) ) {
+				$compare_to = $compare_to->date;
+			}
+		} else {
+			$compare_to = time();
+		}
+
+		return human_time_diff( $this->date->getTimestamp(), $compare_to );
+	}
 }
 
 Date::init();

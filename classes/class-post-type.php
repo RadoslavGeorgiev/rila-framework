@@ -572,6 +572,23 @@ class Post_Type extends Item {
 	}
 
 	/**
+	 * Returns all posts from the current post type.
+	 *
+	 * @since 3.0
+	 *
+	 * @return Posts
+	 */
+	public static function all() {
+		$collection = Posts::all();
+
+		$caller = get_called_class();
+		$slug   = self::get_registered_slug( $caller );
+		$collection->type( $slug );
+
+		return $collection;
+	}
+
+	/**
 	 * Checks if the post is currently being displayed.
 	 *
 	 * @since 0.3

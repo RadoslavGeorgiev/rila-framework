@@ -3,6 +3,7 @@ namespace Rila\Collection;
 
 use Rila\Collection;
 use Rila\Query_Args;
+use Rila\Query;
 
 /**
  * Handles collections of posts.
@@ -84,5 +85,16 @@ class Posts extends Collection {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Generates a new query, which uses the same arguments as the collection.
+	 *
+	 * @since 0.3
+	 *
+	 * @return Query
+	 */
+	public function get_query() {
+		return new Query( $this->args );
 	}
 }
