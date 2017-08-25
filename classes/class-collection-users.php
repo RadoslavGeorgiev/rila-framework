@@ -34,6 +34,11 @@ class Users extends Collection {
 		$args = array();
 
 		if( ! is_null( $this->ids ) ) {
+			if( empty( $this->ids ) ) {
+				$this->initialized = true;
+				return;
+			}
+			
 			$args = array(
 				'include' => $this->ids,
 				'order'   => 'ASC',
@@ -71,13 +76,13 @@ class Users extends Collection {
 	 * @param mixed  $value The value of the argument.
 	 */
 	protected function set( $key, $value ) {
-		static $dummy;
+		static $argument_keys;
 
-		if( is_null( $dummy ) ) {
-			$dummy = new \WP_User( new \stdClass() );
+		if( is_null( $argument_keys ) ) {
+			$argument_keys = [ 'blog_id', 'role', 'role__in', 'role__not_in', 'meta_key', 'meta_value', 'meta_compare', 'meta_query', 'date_query', 'include', 'exclude', 'orderby', 'order', 'offset', 'search', 'number', 'count_total', 'fields', 'who' ];
 		}
 
-		if( property_exists( $dummy, $key ) ) {
+		if( in_array( $key, $argument_keys ) ) {
 			$this->args[ $key ] = $value;
 		} else {
 			$this->meta_query[] = compact( 'key', 'value' );

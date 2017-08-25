@@ -41,6 +41,15 @@ class Date {
 	}
 
 	/**
+	 * Returns the timestamp of the date.
+	 *
+	 * @return int
+	 */
+	public function get_timestamp() {
+		return $this->date->getTimestamp();
+	}
+
+	/**
 	 * Converts the date to string.
 	 *
 	 * @return string
@@ -74,6 +83,10 @@ class Date {
 	public function __get( $property ) {
 		if( 'time' == $property ) {
 			return $this->get_time();
+		}
+
+		if( 'timestamp' == $property ) {
+			return $this->get_timestamp();
 		}
 	}
 
