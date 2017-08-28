@@ -6,7 +6,7 @@ namespace Rila;
  */
 class Query implements \Iterator, \Countable {
 	use Query_Args;
-	
+
 	/**
 	 * Holds the actual, prepared arguments for WP_Query/get_posts.
 	 *
@@ -173,6 +173,7 @@ class Query implements \Iterator, \Countable {
     	$this->query();
 
 		$p = $this->query->posts[ $this->query->current_post ];
+		$this->query->in_the_loop = true;
 		return rila_post( $p );
     }
 
