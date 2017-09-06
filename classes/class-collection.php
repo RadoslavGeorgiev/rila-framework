@@ -94,7 +94,11 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 			} elseif( $items_only ) {
 				$this->items = array();
 				foreach( $request as $item ) {
-					$this->items[] = call_user_func( array( $this->item_type, 'factory' ),  $item );
+					if( is_a( $item, $this->item_type ) ) {
+						$this->items[] = $item;
+					} else {
+						$this->items[] = call_user_func( array( $this->item_type, 'factory' ),  $item );
+					}
 				}
 				$this->initialized = true;
 			} else {
@@ -477,5 +481,16 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 		}
 
 		return $this->items[ count( $this->items ) - 1 ];
+	}
+
+	/**
+	 * Returns all of the items from the collection.
+	 *
+	 * @return Rila\Item[]
+	 */
+	public function get_all() {
+		$this->check();
+
+		return $this->items;
 	}
 }
