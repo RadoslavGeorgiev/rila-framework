@@ -58,6 +58,14 @@ abstract class Item {
 	protected $meta = array();
 
 	/**
+	 * Holds default fallback values.
+	 *
+	 * @since 0.3
+	 * @var mixed[]
+	 */
+	protected $defaults = array();
+
+	/**
 	 * Holds the arguments for each registered post type or taxonomy.
 	 *
 	 * @since 0.1
@@ -171,14 +179,19 @@ abstract class Item {
 			}
 		}
 
-		# Last priority: Item data (post/taxonomy)
+		# Priority 4 Item data (post/taxonomy)
 		if( ! isset( $returnable ) && property_exists( $this->item, $property ) ) {
 			$returnable = $this->item->$property;
 		}
 
+		# Last priority: Defaults
+		if( ! isset( $returnable ) && isset( $this->defaults[ $property ] ) ) {
+			$returnable = $this->defaults[ $property ];
+		}
+
 		# If there is no value, just return false
 		if( ! isset( $returnable ) ) {
-			return false;
+			return null;
 		}
 
 		/**
