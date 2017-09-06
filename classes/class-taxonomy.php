@@ -81,10 +81,11 @@ class Taxonomy extends Item {
 		parent::initialize();
 
 		$this->translate(array(
-			'id'    => 'term_id',
-			'ID'    => 'term_id',
-			'title' => 'name',
-			'type'  => 'taxonomy'
+			'id'      => 'term_id',
+			'ID'      => 'term_id',
+			'title'   => 'name',
+			'type'    => 'taxonomy',
+			'content' => 'description'
 		));
 
 		$this->map(array(
