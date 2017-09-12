@@ -61,7 +61,8 @@ class Site extends Item {
 
 		$this->map(array(
 			'page_on_front'  => 'post',
-			'page_for_posts' => 'post'
+			'page_for_posts' => 'post',
+			'url'            => 'trailingslashit'
 		));
 
 		/**

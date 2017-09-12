@@ -240,6 +240,11 @@ abstract class Item {
 		# Translate the property for further calls
 		$property = $this->translate_property( $property );
 
+		# Priority 1: Custom methods
+		if( method_exists( $this, $property ) ) {
+			return $this->$property();
+		}
+
 		# Priority 1: Meta values
 		if( isset( $this->meta[ $property ] ) ) {
 			return $this->meta[ $property ];
@@ -484,7 +489,7 @@ abstract class Item {
 			}
 		}
 
-		trigger_error( 'Call to undefined method ' . __CLASS__ . '::' . $method . '()', E_USER_ERROR );
+		trigger_error( 'Call to undefined method ' . get_class($this) . '::' . $method . '()', E_USER_ERROR );
 	}
 
 	/**

@@ -91,6 +91,11 @@ class Collection implements \Iterator, \Countable, \ArrayAccess {
 
 			if( $ids_only ) {
 				$this->ids = $ids;
+
+				if( empty( $ids ) ) {
+					// In case the collection is empty, don't try to load it later
+					$this->initialized = true;
+				}
 			} elseif( $items_only ) {
 				$this->items = array();
 				foreach( $request as $item ) {

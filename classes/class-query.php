@@ -134,9 +134,9 @@ class Query implements \Iterator, \Countable {
 			return $this->query->found_posts;
 		} elseif( 'pagination' == $property ) {
 			return $this->pagination();
+		} else {
+			return $this->query->get( $property );
 		}
-
-		throw new Undefined_Property_Exception( "Undefined property $property" );
 	}
 
 	/**
