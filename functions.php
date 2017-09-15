@@ -174,7 +174,7 @@ function rila_comment( $comment ) {
  * @param mixed $user Either a WP_User or a user ID.
  * @return User
  */
-function rila_user( $user ) {
+function rila_user( $user = null ) {
 	return Rila\User::factory( $user );
 }
 
