@@ -110,12 +110,12 @@ class ACF_Helper {
 			# Look for values
 			$found = false;
 			foreach( $meta as $t1 => $t2 ) {
-				if( $key != $t1 && strpos( $t1, $key ) === 0 ) {
+				if( $key != $t1 && preg_match( '~^' . preg_quote( $key ) . '_\d+~', $t1 ) ) {
 					$found = true;
 					$nested = false;
 
 					foreach( $repeaters as $rv => $rd ) {
-						if( strpos( $key, $rv ) === 0 )
+						if( preg_match( '~^' . preg_quote( $key ) . '_\d+~', $rv ) )
 							$found = false;
 					}
 
@@ -144,9 +144,9 @@ class ACF_Helper {
 					$prefix = $rkey . '_' . $i;
 					$repeater_data[ $rkey ][ $i . '___type' ] = $type;
 
-					if( strpos( $key, $prefix ) === 0 ) {
+					if( 0 === strpos( $key, $prefix ) ) {
 						$in_repeater = true;
-						$repeater_data[ $rkey ][ preg_replace( '~^' . preg_quote( $rkey ) . '_~', '', $key ) ] = $value;
+						$repeater_data[ $rkey ][ preg_replace( '~^' . preg_quote( $rkey ) . '_(\d+)_~', '$1_', $key ) ] = $value;
 						$ignored[] = '_' . $key;
 						break;
 					}
