@@ -169,10 +169,16 @@ class Builder implements \Iterator, \Countable {
 	 *
 	 * @return string The full HTML of the builder and its blocks.
 	 */
-	public function render() {
+	public function render($extra = array()) {
 		$this->init();
 		$out     = '';
 		$of_type = array();
+
+		if (! empty($extra)) {
+			$this->data = array_map(function($block) use ($extra) {
+				return array_merge($block, $extra);
+			}, $this->data);
+		}
 
 		foreach( $this->blocks as $index => $block ) {
 			$simplified = rila_cleanup_class( get_class( $block ), 'Block' );
