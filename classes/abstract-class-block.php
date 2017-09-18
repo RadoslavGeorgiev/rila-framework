@@ -29,6 +29,17 @@ abstract class Block implements \ArrayAccess {
 	 */
 	public static function setup( $block ) {}
 
+	public static function factory( $block_data ) {
+		$class_name = get_called_class();
+		$block = new $class_name( $block_data );
+
+		if( ! $block->skip() ) {
+			return array( $block );
+		} else {
+			return array();
+		}
+	}
+
 	/**
 	 * Generates the ACF layout hash for a block.
 	 *

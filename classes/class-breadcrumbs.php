@@ -166,4 +166,28 @@ class Breadcrumbs {
 				'404'
 			);
 	}
+
+	/**
+	 * Returns the last parent breadcrumb.
+	 *
+	 * @since 0.3
+	 *
+	 * @return Rila\Item
+	 */
+	public function get_parent() {
+		$item = $this->get_item();
+
+		if( false === $item ) {
+			return false;
+		}
+
+		// Check for a normal parent
+		if( $item->parent ) {
+			return $item->parent;
+		} elseif( method_exists( $item, 'get_breadcrumbs_root' ) ) {
+			return $item->get_breadcrumbs_root();
+		} else {
+			return false;
+		}
+	}
 }

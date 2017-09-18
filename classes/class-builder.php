@@ -100,11 +100,7 @@ class Builder implements \Iterator, \Countable {
 				continue;
 			}
 
-			$block = new $type( $block );
-
-			if( ! $block->skip() ) {
-				$this->blocks[] = $block;
-			}
+			$this->blocks = array_merge( $this->blocks, $type::factory( $block ) );
 		}
 	}
 
