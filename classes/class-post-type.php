@@ -112,6 +112,10 @@ class Post_Type extends Item {
 
 		$this->initialize_taxonomies();
 
+		$this->set_defaults([
+			'_thumbnail_id' => false
+		]);
+
 		$this->translate(array(
 			'id'        => 'ID',
 			'title'     => 'post_title',

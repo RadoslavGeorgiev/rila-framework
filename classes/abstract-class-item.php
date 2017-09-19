@@ -371,6 +371,15 @@ abstract class Item {
 	}
 
 	/**
+	 * Sets defaults to the class.
+	 *
+	 * @param mixed[] $defaults The values to use.
+	 */
+	public function set_defaults( $defaults ) {
+		$this->defaults = array_merge( $this->defaults, $defaults );
+	}
+
+	/**
 	 * Returns the sortable property of the class.
 	 *
 	 * @since 0.1
