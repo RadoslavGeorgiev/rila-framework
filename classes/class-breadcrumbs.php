@@ -119,6 +119,10 @@ class Breadcrumbs {
 		$last_item  = false;
 
 		do {
+			if( ! $item ) {
+				continue;
+			}
+			
 			$links[]   = $item;
 			$last_item = $item;
 			$item      = $item->parent;
