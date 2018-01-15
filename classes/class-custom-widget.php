@@ -86,6 +86,12 @@ abstract class Custom_Widget extends \WP_Widget {
 				->register();
 		}
 
+		if( ! empty( $this->fields ) && function_exists( 'ultimate_fields' ) ) {
+			\UF3\Container::create( $this->id, $this->title )
+				->add_location( 'widget', get_class( $this ) )
+				->add_fields( $this->fields );
+		}
+
 		parent::__construct( $this->id, $this->title, $widget_ops, $control_ops );
 	}
 
@@ -125,7 +131,6 @@ abstract class Custom_Widget extends \WP_Widget {
 	public function widget( $args, $instance ) {
 		$widget = new Widget( $this, $args, $instance );
 		$widget->map( $this->map );
-
 
 		echo $args[ 'before_widget' ];
 			$r = $this->render( $widget );
