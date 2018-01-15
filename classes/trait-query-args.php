@@ -126,7 +126,6 @@ trait Query_Args {
 
 			# Add shortcuts
 			$shortcuts = array(
-				'type'    => 'post_type',
 				'in'      => 'post__in',
 				'include' => 'post__in',
 				'exclude' => 'post__not_in',
@@ -236,6 +235,23 @@ trait Query_Args {
 
 		# Fallback to the normal "set" method.
 		$this->set( $method, $value, true );
+
+		return $this;
+	}
+
+	/**
+	 * Allows changes of the post type.
+	 *
+	 * @since 0.3
+	 *
+	 * @param string $post_type The post type(s) to use.
+	 */
+	public function type( $post_type ) {
+		if( ! $this->allow_augumentation() ) {
+			return false;
+		}
+
+		$this->args[ 'post_type' ] = (array) $post_type;
 
 		return $this;
 	}

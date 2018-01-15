@@ -189,6 +189,7 @@ abstract class Item {
 			$returnable = $this->defaults[ $property ];
 		}
 
+
 		# If there is no value, just return false
 		if( ! isset( $returnable ) ) {
 			return null;
@@ -207,7 +208,7 @@ abstract class Item {
 		$returnable = apply_filters( 'rila.property.raw', $returnable, $property, $this );
 
 		# Maybe map
-		if( $returnable ) {
+		if( $returnable || is_array( $returnable ) ) {
 			$returnable = $this->map_value( $returnable, $property );
 		}
 
