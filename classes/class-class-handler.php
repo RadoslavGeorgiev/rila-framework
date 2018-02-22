@@ -1,7 +1,7 @@
 <?php
 namespace Rila;
 
-use UF3\Container;
+use Ultimate_Fields\Container;
 
 /**
  * Handles the registration and rewrite of basic classes.

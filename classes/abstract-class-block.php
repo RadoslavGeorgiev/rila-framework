@@ -75,10 +75,10 @@ abstract class Block implements \ArrayAccess {
 	 * @since 0.3
 	 *
 	 * @param string $class_name The class of the block.
-	 * @return UF3\Container\Repeater_Group;
+	 * @return Ultimate_Fields\Container\Repeater_Group;
 	 */
 	public static function get_group( $class_name ) {
-		$group = new \UF3\Container\Repeater_Group( str_replace( '\\', '_ns_', $class_name ) );
+		$group = new \Ultimate_Fields\Container\Repeater_Group( str_replace( '\\', '_ns_', $class_name ) );
 
 		$queue = array( $class_name );
 		$parent = $class_name;
